@@ -17,10 +17,8 @@
 clear all; close all; clc;
 
 %% Specify inputs
-pID = 'amyg048';            % MANUALLY DEFINE
-test_phase = 'study';       % MANUALLY DEFINE
-fs = 1024;                  % MANUALLY DEFINE
-
+pID = 'amyg048';
+test_phase = 'study';
 save_sync = true;
 save_fig = true;
 
@@ -33,6 +31,7 @@ cd(lfp_path);
 
 load(strcat(lfp_path,lfp_file));
 tVec = [1:length(lfp)];
+fs = 499.707104;
 tVec = tVec / fs;
 
 %% Interact w/ Raw Data to ID Sync Pulse
