@@ -11,15 +11,18 @@
 %
 % Justin Campbell & Krista Wahlstrom
 % justin.campbell@hsc.utah.edu
-% 02/17/2023
+% 06/12/2023
 
 %% Clear workspace
 clear all; close all; clc;
 
 %% Specify inputs
-pID = 'amyg048';            % MANUALLY DEFINE
+pID = 'amyg030';            % MANUALLY DEFINE
 test_phase = 'study';       % MANUALLY DEFINE
-fs = 1024;                  % MANUALLY DEFINE
+fs = 1023.999;              % MANUALLY DEFINE
+sync_thresh = 8000;         % MANUALLY DEFINE
+minIPI = 10; % in seconds; ~10s for study, _s for immediate
+sep_blocks = 0; % default = 0, 1 = separate start/end/threshold for each block
 
 save_sync = true;
 save_fig = true;
@@ -41,7 +44,7 @@ tVec = tVec / fs;
 figure(1);
 plot(tVec, lfp, 'k');
 title(pID);
-xlabel('Sample')
+xlabel('Time (s)')
 ylabel('Voltage (uV)')
 
 % instructions for selection of sync pulse
@@ -77,15 +80,55 @@ pad_time = trial_get_secs - LFP_trialtime;
 LFP_trialtimes = all_get_secs - pad_time;
 LFP_trialtimes = LFP_trialtimes';
 
+%% Peak detection
+
+% Initial find peaks
+study_start = LFP_trialtimes(1);
+study_end = LFP_trialtimes(end);
+
+[pks, pk_locs] = findpeaks(lfp, 'MinPeakDistance', (minIPI*fs), 'MinPeakHeight', sync_thresh);
+pk_locs = pk_locs / fs;
+[~,start_pks] = min(abs(pk_locs - study_start));
+[~,end_pks] = min(abs(pk_locs - study_end));
+
+pk_locs = pk_locs(start_pks:end_pks);
+
+% Search blocks separately
+if sep_blocks == 1
+    figure(1);
+    plot(tVec, lfp, 'k')
+    hold on
+    xline(LFP_trialtimes, '-r')
+    xline(pk_locs, '--c')
+    title(pID);
+    xlabel('Time (s)')
+    ylabel('Voltage (uV)')
+    xlim([study_start - 5, study_end + 5])
+    clc;
+    input('Hit enter when done separating blocks.')
+    
+    block_thresholds = [1000, 1000, 1000, 1000];            % MANUALLY DEFINE
+    block_starts = [LFP_trialtimes(1), 1550, 2230, 3500];   % MANUALLY DEFINE
+    block_ends = [1440, 2100, 2720, LFP_trialtimes(end)];   % MANUALLY DEFINE
+    
+    pk_locs = [];
+    for i = 1:length(block_thresholds)
+        [~, block_pk_locs] = blockDetection(lfp, fs, block_thresholds(i), block_starts(i), block_ends(i));
+        pk_locs = [pk_locs, block_pk_locs];
+    end
+end
+
 %% Visualize aligned sync pulses
 
 figure(1);
 plot(tVec, lfp, 'k')
 hold on
 xline(LFP_trialtimes, '-r')
+xline(pk_locs, '--b')
 title(pID);
 xlabel('Time (s)')
 ylabel('Voltage (uV)')
+xlim([study_start - 5, study_end + 5])
 
 clc;
 input('Hit enter when done reviewing sync plot.')
@@ -110,9 +153,13 @@ clc;
 fprintf('<strong>%s %s</strong> \n', pID, test_phase);
 if export
     if save_sync
-        filename = strcat(lfp_path, pID, '_', test_phase, '_LFPtrialtimes');
+        filename = strcat(lfp_path, pID, '_', test_phase, '_GetSecsTrialTimes');
         save(filename, 'LFP_trialtimes');
-        disp('Saved LFP trial times!')
+        disp('Saved GetSecs trial times!')
+
+        filename = strcat(lfp_path, pID, '_', test_phase, '_FindPkTrialTimes');
+        save(filename, 'pk_locs');
+        disp('Saved find peaks trial times!')
     end
     if save_fig
         saveas(gcf, strcat(lfp_path, pID, '_', test_phase, '_SyncPlot.fig'));
@@ -122,4 +169,3 @@ else
     disp('Sync rejected. Troubleshoot or document reason for rejection.')
 end
 close all;
-
