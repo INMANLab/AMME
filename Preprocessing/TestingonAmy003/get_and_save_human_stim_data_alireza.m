@@ -466,6 +466,7 @@ for p = 1:length(patient)
         % figure
         % pwelch(C,[],[],[],params.Fs)
         % 
+        % (data,movingwin,tau,params,p,plt,f0)
         lfp=rmlinesmovingwinc(lfp,[1.5 .5],10,params,.00000001,'n', 60);%remove 60 Hz noise
         lfp=rmlinesmovingwinc(lfp,[2 1],10,params,.00000001,'n', 42);%remove 42 Hz noise (source?); use [2 1] since not as bad
         % 
