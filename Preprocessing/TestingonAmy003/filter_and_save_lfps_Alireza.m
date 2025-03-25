@@ -1,13 +1,27 @@
 %% Initialization:
-
+if(~exist("rdDir","var"))
+    Initialize;
+end
+clearvars -except wrDir rdDir
+clc
 
 %%
 
-samprate = 500;params.Fs;%based on EDFbrowser and feedback from EMU director (via Cory) to use this rather than 500 
+% samprate = 500;params.Fs;%based on EDFbrowser and feedback from EMU director (via Cory) to use this rather than 500 
+% 
+% %Let's minimally filter to get rid of what looks like low frequency motion artifact (and DC offset)
+% lowcut = params.fpass(1);
+% highcut = params.fpass(2)-1;
+% %get parameters for filtering
+% [n,fo,mo,w] = remezord([lowcut-1 lowcut highcut highcut+1], [0 1 0], [1 1 1]*0.01, samprate);
+% b = remez(n,fo,mo,w);
+% a=1;
+
+samprate = 999.41211;%based on EDFbrowser and feedback from EMU director (via Cory) to use this rather than 1000 
 
 %Let's minimally filter to get rid of what looks like low frequency motion artifact (and DC offset)
-lowcut = params.fpass(1);
-highcut = params.fpass(2)-1;
+lowcut = 1;
+highcut = 448;
 %get parameters for filtering
 [n,fo,mo,w] = remezord([lowcut-1 lowcut highcut highcut+1], [0 1 0], [1 1 1]*0.01, samprate);
 b = remez(n,fo,mo,w);
@@ -158,11 +172,11 @@ for ch = 2:129
     fn = sprintf('day2_lfp_%03d.mat', ch-1); % use channel - 1 since first channel is event channel
     fprintf('\tFiltering and saving %s\n', fn)
     %filters signal in eeg with McClellan-Parks FIR filter
-    timeSeries = decimate(timeSeries*1e-6,round(params.Fs/500));
-    lfp = filtfilt(bN60,aN60, timeSeries');
-    lfp = filtfilt(bN42,aN42, lfp);
-    lfp = filtfilt(bN120,aN120, lfp);
-    lfp = filtfilt(b,a, lfp);
+    % timeSeries = decimate(timeSeries*1e-6,round(params.Fs/500));
+    % lfp = filtfilt(bN60,aN60, timeSeries');
+    % lfp = filtfilt(bN42,aN42, lfp);
+    % lfp = filtfilt(bN120,aN120, lfp);
+    lfp = filtfilt(b,a, timeSeries);
     % save(fn, 'lfp');
     clear templfp;
     clear lfp;

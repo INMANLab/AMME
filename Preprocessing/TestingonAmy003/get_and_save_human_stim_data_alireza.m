@@ -400,7 +400,7 @@ end%patient
 fprintf('Geting LFP data for select regions...\n')
 
 params.fpass=[1 120]; % band of frequencies to be kept
-params.tapers=[1 1]; % taper parameters
+params.tapers=[3 5]; % taper parameters
 params.pad=1; % pad factor for fft
 params.err=[2 0.05];
 params.trialave=1;
@@ -413,7 +413,7 @@ for p = 1:length(patient)
   %hard-coded here to get 10 seconds (-5 to +5 around image onset)
   sampsbefore = round(patient(p).samprate * 5);
   sampsafter = round(patient(p).samprate * 5);
-  for ph=1:3
+  for ph=3%1:3
     fprintf('\t\tPhase %d...\n',ph)
     if(ph<3)
       d=1;
@@ -435,7 +435,7 @@ for p = 1:length(patient)
         load(tmplfpfn)%load the lfp from the .mat file; not 100% efficient to load first day's lfp twice, but whatevs
         
         %subtract median lfp from this lfp--same as digitally re-referencing
-        lfp = lfp-medlfp;
+        % lfp = lfp-medlfp;
 
         % B = rmlinesmovingwinc(lfp,[1.5 .5],10,params,.00000001,'n', 60);
         % 
@@ -502,6 +502,22 @@ end%patient
 fprintf('done.\n')
 
 %FYI% up to user to save patient struct to the hard drive
+
+
+
+datMatlab = zscore(lfp);
+datFilt = zscore(eeg_data(:,2));
+figure
+subplot 211
+plot(datMatlab)
+hold on
+plot(datFilt)
+legend("Mat","Python")
+subplot 212
+pwelch(datMatlab,[],[],[],999.41211)
+hold on
+pwelch(datFilt,[],[],[],999.41211)
+legend("Mat","Python")
 
 %% Compare this signal with Martina's preprocessing data
 pythonDat = load("PythonPreprocess.mat");
