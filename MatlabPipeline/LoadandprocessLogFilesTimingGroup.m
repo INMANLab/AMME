@@ -49,60 +49,60 @@ for p = 1:length(patient)
   %MATCH TO THE find_amyg000_phase_trials_times.m FILES
 
 % 
-%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   % read in information about STUDY SESSION from log file %
-%   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-%   if strcmp(patient(p).name, 'amyg045') == 1 || strcmp(patient(p).name, 'amyg072') == 1
-%       logfn = sprintf('%s_Lamyg.log', patient(p).name);
-%       fprintf('Log file name is %s\n',logfn)
-%   elseif strcmp(patient(p).name, 'amyg057') ==1
-%       logfn = sprintf('%s_bipolar.log', patient(p).name);
-%       fprintf('Log file name is %s\n',logfn)
-%   else
-%       logfn = sprintf('%s.log', patient(p).name);
-%       fprintf('Log file name is %s\n',logfn)
-%   end
-% mydir = dir(logfn);
-% 
-% if isempty(mydir)
-%     fprintf('Log file name for day1 is not found for %s!!!\n')
-% end
-% 
-%   fileID = fopen(logfn);
-%   C = textscan(fileID,'%d %f %s %d %s %s %s %s %*[^\n]', 'HeaderLines',3); % reads in 3 header lines 
-%   %means skip to the next line(row) --> %*[^\n]
-%   fclose(fileID);
-% 
-%   %FYI for C = textscan above
-%   %C{1}(1:5) should be 1, 2, 3, 4, 5, i.e., trial numbers %d is for double as whole number
-%   %C{2}(1:5) should be RTs for first 5 trials %f is float w a decimal
-%   %C{3}{1} should be 'in', 'out', or 'n/a' , i.e., trial type
-%   %C{4}(1:5) should be 0, 1, 2, 3 (no stim, before, during, after)
-%   %C{5}{1} should be name of image file for first trial
-%   %C{6}{1} - amplitude of stimulation in microamps
-%   %C{7}{1} - sync from starting time in seconds
-%   %C{8}{1} - GetSecs computer clock 
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % read in information about STUDY SESSION from log file %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-  % if(length(C{1})~=200)
-  %   fprintf('Error: there should be 200 trials in study session.  Check %s.\n', logfn); %fprintf displays in command window
-  % end
-  % for t = 1:length(C{1}) %trial = t
-  %   patient(p).phase(1).trial(t).number = C{1}(t);%just to make sure we're lined up, should be 1 - 200
-  %   patient(p).phase(1).trial(t).rt = C{2}(t); %in/out decision rt (-1 = no button press)
-  %   patient(p).phase(1).trial(t).in_or_out = C{3}{t};%indoor or outdoor (or NA if no button press), as judged by participant
-  %   patient(p).phase(1).trial(t).stimulation = C{4}(t);%0 = nostim, 1=before, 2%= during,3= after
-  %   patient(p).phase(1).trial(t).full_im_name = C{5}{t}; %name of image, including path on testing computer
-  %   patient(p).phase(1).trial(t).amp = C{6}{t};%amplitude in microamps
-  %   patient(p).phase(1).trial(t).sycnfromstart = C{7}{t}; %sync from starting time in seconds - cumulative
-  %   patient(p).phase(1).trial(t).getsecs = C{8}{t}; %computer's inner clock
-  % 
-  %   if(length(patient(p).phase(1).trial_start_times)>=t)
-  %     patient(p).phase(1).trial(t).start_time = patient(p).phase(1).trial_start_times(t);%time of sync pulse ping for this trial = image onset
-  %   else
-  %     patient(p).phase(1).trial(t).start_time = [];
-  %   end
-  % end%trial
+  if strcmp(patient(p).name, 'amyg045') == 1 || strcmp(patient(p).name, 'amyg072') == 1
+      logfn = sprintf('%s_Lamyg.log', patient(p).name);
+      fprintf('Log file name is %s\n',logfn)
+  elseif strcmp(patient(p).name, 'amyg057') ==1
+      logfn = sprintf('%s_bipolar.log', patient(p).name);
+      fprintf('Log file name is %s\n',logfn)
+  else
+      logfn = sprintf('%s.log', patient(p).name);
+      fprintf('Log file name is %s\n',logfn)
+  end
+mydir = dir(logfn);
+
+if isempty(mydir)
+    fprintf('Log file name for day1 is not found for %s!!!\n')
+end
+
+  fileID = fopen(logfn);
+  C = textscan(fileID,'%d %f %s %d %s %s %s %s %*[^\n]', 'HeaderLines',3); % reads in 3 header lines 
+  %means skip to the next line(row) --> %*[^\n]
+  fclose(fileID);
+
+  %FYI for C = textscan above
+  %C{1}(1:5) should be 1, 2, 3, 4, 5, i.e., trial numbers %d is for double as whole number
+  %C{2}(1:5) should be RTs for first 5 trials %f is float w a decimal
+  %C{3}{1} should be 'in', 'out', or 'n/a' , i.e., trial type
+  %C{4}(1:5) should be 0, 1, 2, 3 (no stim, before, during, after)
+  %C{5}{1} should be name of image file for first trial
+  %C{6}{1} - amplitude of stimulation in microamps
+  %C{7}{1} - sync from starting time in seconds
+  %C{8}{1} - GetSecs computer clock 
+
+  if(length(C{1})~=200)
+    fprintf('Error: there should be 200 trials in study session.  Check %s.\n', logfn); %fprintf displays in command window
+  end
+  for t = 1:length(C{1}) %trial = t
+    patient(p).phase(1).trial(t).number = C{1}(t);%just to make sure we're lined up, should be 1 - 200
+    patient(p).phase(1).trial(t).rt = C{2}(t); %in/out decision rt (-1 = no button press)
+    patient(p).phase(1).trial(t).in_or_out = C{3}{t};%indoor or outdoor (or NA if no button press), as judged by participant
+    patient(p).phase(1).trial(t).stimulation = C{4}(t);%0 = nostim, 1=before, 2%= during,3= after
+    patient(p).phase(1).trial(t).full_im_name = C{5}{t}; %name of image, including path on testing computer
+    patient(p).phase(1).trial(t).amp = C{6}{t};%amplitude in microamps
+    patient(p).phase(1).trial(t).sycnfromstart = C{7}{t}; %sync from starting time in seconds - cumulative
+    patient(p).phase(1).trial(t).getsecs = C{8}{t}; %computer's inner clock
+
+    if(length(patient(p).phase(1).trial_start_times)>=t)
+      patient(p).phase(1).trial(t).start_time = patient(p).phase(1).trial_start_times(t);%time of sync pulse ping for this trial = image onset
+    else
+      patient(p).phase(1).trial(t).start_time = [];
+    end
+  end%trial
 
 
 %amyg069 and added variables based on the day2 log files

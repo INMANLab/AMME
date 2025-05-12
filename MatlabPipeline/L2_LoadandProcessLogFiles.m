@@ -1,13 +1,92 @@
 %% Initialization
+% ----> Run L1 first
+cPath = pwd;
+cd(WD) %change the working directory
+
+% load file names information
+fileInfo = readtable(RD+"FileInfoList.csv");
+%% Add file Info the the patient Structure -> Only Study and Day2 are being used
+for p = 1:length(patient)
+    pIdx = find(strcmp(patient(p).name,fileInfo.Patient));
+    if(length(pIdx)<2)
+        error("Patient Not Found: "+patient(p).name);
+    end
+    patient(p).phase(1).logFile = string(fileInfo.Log{pIdx(1)});
+    patient(p).phase(1).edfFile = string(fileInfo.EDF{pIdx(1)});
+    patient(p).phase(1).trialTimeFile = string(fileInfo.TrialTime{pIdx(1)});
+
+    patient(p).phase(3).logFile = string(fileInfo.Log{pIdx(2)});
+    patient(p).phase(3).edfFile = string(fileInfo.EDF{pIdx(2)});
+    patient(p).phase(3).trialTimeFile = string(fileInfo.TrialTime{pIdx(2)});
+end
+%% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%              GET THE START TIMES OF EACH TRIAL                   %
+% as of 6/1/16, includes study, immediate test, and one-day test   %
+%   NOTE: each one of these functions was tailored to the sync     %
+%                  channel for each patient                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+fprintf('Reading log files and getting start times for study AND both test session trials...\n')
+for p = 1:length(patient)
+    fprintf('\tWorking on %s . . .', patient(p).name)
+    cd(patient(p).name)%go into patient's directory
+    load(patient(p).phase(1).syncfn)%load the lfp for the sync channel
+    %get the sync pulse times for the STUDY SESSION
+    fxn = sprintf('find_%s_study_trial_times(lfp)', patient(p).name);
+    try
+        %if it works, just do it
+        patient(p).phase(1).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
+    catch
+        %if it doesn't work, keep moving, but alert us
+        fprintf(' Could not find study session start times in %s...', fxn)
+        patient(p).phase(1).trial_start_times = [];%nada
+    end
+    
+    %load the appropriate lfp for the one-day (day #2) test sync file
+    load(patient(p).phase(3).syncfn)%load the lfp for the sync channel
+    %get the sync pulse times for the ONE-DAY TEST session
+    fxn = sprintf('find_%s_day2_trial_times(lfp)', patient(p).name);
+    try
+        %if it works, just do it
+        patient(p).phase(3).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
+    catch
+        %if it doesn't work, keep moving, but alert us
+        fprintf(' Could not find one-day test session start times in %s...', fxn)
+        patient(p).phase(3).trial_start_times = [];%nada
+    end
+    clear lfp
+
+    cd(cPath)
+    % read Log Files
+    patient = ReadLogFiles(patient,p,WD);
+
+    fprintf('done.\n')
+    cd ..
+end%patients
+
+cd(cPath) %Return to the Current Path
+
+
+
+
+
+
+
+
+
+
+
+
 
 %%
-%---------Original
-LoadandprocessLogFilesOriginalGroup;
-%---------Duration
-LoadandprocessLogFilesDurationGroup;
-
-%-------Timing
-LoadandprocessLogFilesTimingGroup;
+% %---------Original
+% LoadandprocessLogFilesOriginalGroup;
+% %---------Duration
+% LoadandprocessLogFilesDurationGroup;
+% 
+% %-------Timing
+% LoadandprocessLogFilesTimingGroup;
 
 save("PatientStructNoEEG","patient");
 

@@ -1,7 +1,13 @@
 %% Initilization
 clear;
 clc;
+WD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 
+% save the current path
+cPath = pwd;
+cd(WD) %change the working directory
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 %                  AMME ORIGINAL PATIENTS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
@@ -1007,12 +1013,12 @@ end
   patient(pIdx).stimchan(4).num = [];
 
   patient(pIdx).phase(1).name = 'study';
-  patient(pIdx).phase(2).name = 'one-day test';
-  for ph = 1:2 
+  patient(pIdx).phase(3).name = 'one-day test';
+  for ph = [1,3] 
     patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
     patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
   end
-  patient(pIdx).phase(2).syncfn(4) = '2';
+  patient(pIdx).phase(3).syncfn(4) = '2';
   
   patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM> ???
  end
@@ -1061,11 +1067,14 @@ for pIdx = 1:length(patient)
       patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
 end
 
-
 %% Limit the data to only work on included participants
-includedPatients = readtable("FileInfoList.csv");
+includedPatients = readtable(RD+"FileInfoList.csv");
 PatientNames = unique(includedPatients.Patient);
 pList = string(vertcat(patient.name));
 pIndex = find(ismember(pList,PatientNames));
 patient = patient(pIndex);
-
+% Save the patient structure
+save(WR+"PatientStructL1","patient");
+%%
+% return the current path
+cd(cPath);
