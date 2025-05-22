@@ -1,26 +1,30 @@
 %% Initialization
-% ----> Run L1 first
+clear;
+clc;
+RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 cPath = pwd;
-cd(WD) %change the working directory
-
-% load file names information
-fileInfo = readtable(RD+"FileInfoList.csv");
-
 %% Parameters
-eventChName = "Event";
-%% Add file Info the the patient Structure -> Only Study and Day2 are being used
-for p = 1:length(patient)
-    pIdx = find(strcmp(patient(p).name,fileInfo.Patient));
-    if(length(pIdx)<2)
-        error("Patient Not Found: "+patient(p).name);
-    end
-    patient(p).phase(1).logFile = string(fileInfo.Log{pIdx(1)});
-    patient(p).phase(1).edfFile = string(fileInfo.EDF{pIdx(1)});
-    patient(p).phase(1).trialTimeFile = string(fileInfo.TrialTime{pIdx(1)});
+%-------- load file names information
+fileInfo = readtable(RD+"FileInfoList.csv");
+%-------- load patient Structure
+load(WR+"PatientStructL1");
 
-    patient(p).phase(3).logFile = string(fileInfo.Log{pIdx(2)});
-    patient(p).phase(3).edfFile = string(fileInfo.EDF{pIdx(2)});
-    patient(p).phase(3).trialTimeFile = string(fileInfo.TrialTime{pIdx(2)});
+eventChName = "Event";
+%% Add file Info to the patient Structure -> Only Study and Day2 are being used
+for pIdx = 1:length(patient)
+    pIdx = find(strcmp(patient(pIdx).name,fileInfo.Patient));
+    if(length(pIdx)<2)
+        error("Patient Not Found: "+patient(pIdx).name);
+    end
+    patient(pIdx).phase(1).logFile = string(fileInfo.Log{pIdx(1)});
+    patient(pIdx).phase(1).edfFile = string(fileInfo.EDF{pIdx(1)});
+    patient(pIdx).phase(1).trialTimeFile = string(fileInfo.TrialTime{pIdx(1)});
+
+    patient(pIdx).phase(3).logFile = string(fileInfo.Log{pIdx(2)});
+    patient(pIdx).phase(3).edfFile = string(fileInfo.EDF{pIdx(2)});
+    patient(pIdx).phase(3).trialTimeFile = string(fileInfo.TrialTime{pIdx(2)});
 end
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -29,45 +33,45 @@ end
 %   NOTE: each one of these functions was tailored to the sync     %
 %                  channel for each patient                        %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+cd(RDD) %go to Raw Data directory
 fprintf('Reading log files and getting start times for study AND both test session trials...\n')
-for p = 1:length(patient)
-    fprintf('\tWorking on %s . . .', patient(p).name)
-    cd(patient(p).name)%go into patient's directory
-    load(patient(p).phase(1).syncfn)%load the lfp for the sync channel
+for pIdx = 1:length(patient)
+    fprintf('\tWorking on %s . . .', patient(pIdx).name)
+    cd(patient(pIdx).name)
+    load(patient(pIdx).phase(1).syncfn)%load the lfp for the sync channel
     %get the sync pulse times for the STUDY SESSION
-    fxn = sprintf('find_%s_study_trial_times(lfp)', patient(p).name);
+    fxn = sprintf('find_%s_study_trial_times(lfp)', patient(pIdx).name);
     try
         %if it works, just do it
-        patient(p).phase(1).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
+        patient(pIdx).phase(1).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
     catch
         %if it doesn't work, keep moving, but alert us
         fprintf(' Could not find study session start times in %s...', fxn)
-        patient(p).phase(1).trial_start_times = [];%nada
+        patient(pIdx).phase(1).trial_start_times = [];%nada
     end
     
     %load the appropriate lfp for the one-day (day #2) test sync file
-    load(patient(p).phase(3).syncfn)%load the lfp for the sync channel
+    load(patient(pIdx).phase(3).syncfn)%load the lfp for the sync channel
     %get the sync pulse times for the ONE-DAY TEST session
-    fxn = sprintf('find_%s_day2_trial_times(lfp)', patient(p).name);
+    fxn = sprintf('find_%s_day2_trial_times(lfp)', patient(pIdx).name);
     try
         %if it works, just do it
-        patient(p).phase(3).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
+        patient(pIdx).phase(3).trial_start_times = eval(fxn);%calls the patient-specific function to get sync times
     catch
         %if it doesn't work, keep moving, but alert us
         fprintf(' Could not find one-day test session start times in %s...', fxn)
-        patient(p).phase(3).trial_start_times = [];%nada
+        patient(pIdx).phase(3).trial_start_times = [];%nada
     end
     clear lfp
 
     cd(cPath)
     % read Log Files
-    patient = ReadLogFiles(patient,p,WD);
+    patient = ReadLogFiles(patient,pIdx,RDD);
 
     fprintf('done.\n')
     cd ..
 end%patients
-
+cd(cPath) %Return to the Current Path
 %% get Channel Name and Index
 pList = string(vertcat(patient.name));
 
@@ -79,29 +83,32 @@ for pIdx = 1:length(pList)
         indexOffset = 0;
     end
 
-    phaseIdx = 1; % Because the names are the same across both days
-    % for phaseIdx = [1,3]
-        hdr = edfinfo(WD+string(patient(pIdx).name)+string(filesep)+patient(pIdx).phase(phaseIdx).edfFile);
+    % phaseIdx = 1; % Because the names are the same across both days
+    for phaseIdx = [1,3]
+        patientPath = RDD+patient(pIdx).name+string(filesep);
+        hdr = edfinfo(patientPath+patient(pIdx).phase(phaseIdx).edfFile);
         chNamesAll = hdr.SignalLabels;
+        patient(pIdx).phase(phaseIdx).chNamesAll = chNamesAll;
+        %-------------- find LPF channel names
         for regionIdx = 1:length(patient(pIdx).ipsi_region)
             if(~isempty(patient(pIdx).ipsi_region(regionIdx).lfpnum))
-                patient(pIdx).ipsi_region(regionIdx).lfpnum = indexOffset+patient(pIdx).ipsi_region(regionIdx).lfpnum;
-                patient(pIdx).ipsi_region(regionIdx).lfpName = chNamesAll(patient(pIdx).ipsi_region(regionIdx).lfpnum);
-
+                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpnum = indexOffset+patient(pIdx).ipsi_region(regionIdx).lfpnum;
+                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpName = chNamesAll(patient(pIdx).ipsi_region(regionIdx).lfpnum);
             end
         end
-    % end
-    for phaseIdx = 1:length(patient(pIdx).removeChannels)
-        chNames = convertCharsToStrings(patient(pIdx).removeChannels{phaseIdx});
+
+        %-------------- find the index of the removing channels 
+        chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).removeChannels{phaseIdx});
         [~,chIdx]=ismember(chNames,chNamesAll);
         [~,eventChIdx]=ismember(lower(eventChName),lower(chNamesAll));
         if(eventChIdx ~=0)
             chIdx = [eventChIdx,chIdx];
         end
         if(~isempty(chIdx(chIdx==0)))
-            warning("for patient: "+patient(pIdx).name+", phase: "+phaseIdx+", there are missing channel names")
+            warning("for patient: "+patient(pIdx).name+", phase: "+...
+                    phaseIdx+", there are missing channel names: "+join(chNames(chIdx==0)))
         end
-        patient(pIdx).removeChannelsIdx{phaseIdx} = chIdx;
+        patient(pIdx).phase(phaseIdx).removeChannelsIdx{phaseIdx} = chIdx;
     end
 end
 
