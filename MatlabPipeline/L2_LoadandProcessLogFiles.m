@@ -13,18 +13,14 @@ load(WR+"PatientStructL1");
 
 eventChName = "Event";
 %% Add file Info to the patient Structure -> Only Study and Day2 are being used
-for pIdx = 1:length(patient)
-    pIdx = find(strcmp(patient(pIdx).name,fileInfo.Patient));
-    if(length(pIdx)<2)
-        error("Patient Not Found: "+patient(pIdx).name);
+for pIdx = 1:length(fileInfo.Patient)
+    matchedPIdx = find(strcmp(fileInfo.Patient{pIdx},{patient.name}));
+    if(isempty(matchedPIdx))
+        error("Patient Not Found: "+fileInfo.Patient(pIdx));
     end
-    patient(pIdx).phase(1).logFile = string(fileInfo.Log{pIdx(1)});
-    patient(pIdx).phase(1).edfFile = string(fileInfo.EDF{pIdx(1)});
-    patient(pIdx).phase(1).trialTimeFile = string(fileInfo.TrialTime{pIdx(1)});
-
-    patient(pIdx).phase(3).logFile = string(fileInfo.Log{pIdx(2)});
-    patient(pIdx).phase(3).edfFile = string(fileInfo.EDF{pIdx(2)});
-    patient(pIdx).phase(3).trialTimeFile = string(fileInfo.TrialTime{pIdx(2)});
+    patient(matchedPIdx).phase(fileInfo.Phase(pIdx)).logFile = string(fileInfo.Log{pIdx});
+    patient(matchedPIdx).phase(fileInfo.Phase(pIdx)).edfFile = string(fileInfo.EDF{pIdx});
+    patient(matchedPIdx).phase(fileInfo.Phase(pIdx)).trialTimeFile = string(fileInfo.TrialTime{pIdx});
 end
 %% 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -75,8 +71,8 @@ cd(cPath) %Return to the Current Path
 %% get Channel Name and Index
 pList = string(vertcat(patient.name));
 
-for pIdx = 1:length(pList)
-
+%%
+for pIdx = 13:length(pList)
     if(strcmp(patient(pIdx).exp,'Original'))
         indexOffset = 1;
     else
@@ -85,30 +81,35 @@ for pIdx = 1:length(pList)
 
     % phaseIdx = 1; % Because the names are the same across both days
     for phaseIdx = [1,3]
+        disp("Loading channels name and info for Patient: "+patient(pIdx).name+", Phase: "+phaseIdx)
         patientPath = RDD+patient(pIdx).name+string(filesep);
         hdr = edfinfo(patientPath+patient(pIdx).phase(phaseIdx).edfFile);
         chNamesAll = hdr.SignalLabels;
+        chNamesAll = replace(chNamesAll," ","");
         patient(pIdx).phase(phaseIdx).chNamesAll = chNamesAll;
         %-------------- find LPF channel names
         for regionIdx = 1:length(patient(pIdx).ipsi_region)
             if(~isempty(patient(pIdx).ipsi_region(regionIdx).lfpnum))
-                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpnum = indexOffset+patient(pIdx).ipsi_region(regionIdx).lfpnum;
-                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpName = chNamesAll(patient(pIdx).ipsi_region(regionIdx).lfpnum);
+                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).name = patient(pIdx).ipsi_region(regionIdx).name;
+                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpIdx = indexOffset+patient(pIdx).ipsi_region(regionIdx).lfpnum;
+                patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpName = chNamesAll(patient(pIdx).phase(phaseIdx).ipsi_region(regionIdx).lfpIdx);
             end
         end
 
         %-------------- find the index of the removing channels 
-        chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).removeChannels{phaseIdx});
+        chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).removeChannels.names);
         [~,chIdx]=ismember(chNames,chNamesAll);
         [~,eventChIdx]=ismember(lower(eventChName),lower(chNamesAll));
         if(eventChIdx ~=0)
             chIdx = [eventChIdx,chIdx];
+            chNames = [chNamesAll(eventChIdx),chNames];
         end
         if(~isempty(chIdx(chIdx==0)))
             warning("for patient: "+patient(pIdx).name+", phase: "+...
                     phaseIdx+", there are missing channel names: "+join(chNames(chIdx==0)))
         end
-        patient(pIdx).phase(phaseIdx).removeChannelsIdx{phaseIdx} = chIdx;
+        patient(pIdx).phase(phaseIdx).removeChannels.names = chNames;
+        patient(pIdx).phase(phaseIdx).removeChannels.chIdx = chIdx;
     end
 end
 
