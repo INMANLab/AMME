@@ -72,13 +72,16 @@ cd(cPath) %Return to the Current Path
 pList = string(vertcat(patient.name));
 
 %%
-for pIdx = 13:length(pList)
+for pIdx = 1:length(pList)
     if(strcmp(patient(pIdx).exp,'Original'))
         indexOffset = 1;
     else
         indexOffset = 0;
     end
-
+    patient(pIdx).sync_chnum = indexOffset+patient(pIdx).sync_chnum ;
+    for stChIdx = 1:4
+        patient(pIdx).stimchan(stChIdx).num = patient(pIdx).stimchan(stChIdx).num+indexOffset;
+    end
     % phaseIdx = 1; % Because the names are the same across both days
     for phaseIdx = [1,3]
         disp("Loading channels name and info for Patient: "+patient(pIdx).name+", Phase: "+phaseIdx)
@@ -101,6 +104,7 @@ for pIdx = 13:length(pList)
         [~,chIdx]=ismember(chNames,chNamesAll);
         [~,eventChIdx]=ismember(lower(eventChName),lower(chNamesAll));
         if(eventChIdx ~=0)
+            disp("-------Event Channel Found")
             chIdx = [eventChIdx,chIdx];
             chNames = [chNamesAll(eventChIdx),chNames];
         end
@@ -115,8 +119,8 @@ end
 
 
 % To Dos
-% Convert the EEG data timetable to array;
-% double check the indeces of the Event channel in the EEG array;
+% Convert the EEG data timetable to array; --> Done
+% double check the indeces of the Event channel in the EEG array; ; --> Done
 % double check the indexings of the removing channels to be consistent with EEG array;
 % Check for Zero indeces that are missing or changed between days;
 % find the syncpulse channel name and index;

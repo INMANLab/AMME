@@ -412,9 +412,9 @@ patient(pID).ipsi_region(4).lfpnum = [88,89]; % bilateral stim: stimulated chann
 patient(pID).ipsi_region(5).lfpnum = [10, 40, 41, 98, 101];%all hippocampal regions - Martina: 98 (3Ld1) subiculum, 101 (3Ld4) CA1/DG boundary 
 patient(pID).ipsi_region(6).lfpnum = [];%entorhinal cortex channels - Martina: NAN
 patient(pID).ipsi_region(7).lfpnum = [];%perirhinal cortex channels - Martina: NAN
-patient(pID).removeChannels{1} = {'6 Rd4', 'C122', 'OSAT', 'C121', 'C119', 'C123', 'C120', 'C118', 'C117', 'C127', 'C126', 'C128', 'C124', 'C125', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'Pleth', 'PR', 'TRIG', '3 Ld10', '1Ld3', '1Ld2', '1Ld1', '8 Rd8', '8 Rd9', '8 Rd10', '8 Rd7', '12 Rd3', '12 Rd2', '18 Rd10', '2 Rd1', '2 Rd2', '2 Rd3', '2 Rd4', '2 Rd6', '2 Rd5', '2 Rd7', '2 Rd8', '4 Rd7'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
-patient(pID).removeChannels{2} = {'6 Rd4', 'C122', 'OSAT', 'C121', 'C119', 'C123', 'C120', 'C118', 'C117', 'C127', 'C126', 'C128', 'C124', 'C125', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'Pleth', 'PR', 'TRIG', '3 Ld10', '1Ld3', '1Ld2', '1Ld1', '8 Rd8', '8 Rd9', '8 Rd10', '8 Rd7', '12 Rd3', '12 Rd2', '18 Rd10', '2 Rd1', '2 Rd2', '2 Rd3', '2 Rd4', '2 Rd6', '2 Rd5', '2 Rd7', '2 Rd8', '4 Rd7'}; % Channels that has to be removed before computing the median for phase = 2 (Day1_ImmTest)
-patient(pID).removeChannels{3} = {'2 Rd1', 'Pleth', 'PR', 'TRIG', 'OSAT', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC7', 'DC6', 'DC9', 'DC8', 'DC5', 'DC4', 'DC1', 'DC3', 'C127', 'C126', 'DC2', 'C128', 'C125', 'C123', 'C124', 'C121', 'C120', 'C119', 'C118', 'C117', 'C122', '3 Ld10', '5 Ld8', '8 Rd7', '4 Rd8', '4 Rd7', '4 Rd6', '4 Rd5', '4 Rd4', '4 Rd3', '4 Rd1', '2 Rd8', '4 Rd2', '2 Rd7', '2 Rd6', '2 Rd5', '2 Rd4', '2 Rd3', '2 Rd2'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
+patient(pID).phase(1).removeChannels.names = {'6Rd4', 'C122', 'OSAT', 'C121', 'C119', 'C123', 'C120', 'C118', 'C117', 'C127', 'C126', 'C128', 'C124', 'C125', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'Pleth', 'PR', 'TRIG', '3Ld10', '1Ld3', '1Ld2', '1Ld1', '8Rd8', '8Rd9', '8Rd10', '8Rd7', '12Rd3', '12Rd2', '18Rd10', '2Rd1', '2Rd2', '2Rd3', '2Rd4', '2Rd6', '2Rd5', '2Rd7', '2Rd8', '4Rd7'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
+patient(pID).phase(2).removeChannels.names = {'6Rd4', 'C122', 'OSAT', 'C121', 'C119', 'C123', 'C120', 'C118', 'C117', 'C127', 'C126', 'C128', 'C124', 'C125', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'Pleth', 'PR', 'TRIG', '3Ld10', '1Ld3', '1Ld2', '1Ld1', '8Rd8', '8Rd9', '8Rd10', '8Rd7', '12Rd3', '12Rd2', '18Rd10', '2Rd1', '2Rd2', '2Rd3', '2Rd4', '2Rd6', '2Rd5', '2Rd7', '2Rd8', '4Rd7'}; % Channels that has to be removed before computing the median for phase = 2(Day1_ImmTest)
+patient(pID).phase(3).removeChannels.names = {'2Rd1', 'Pleth', 'PR', 'TRIG', 'OSAT', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC7', 'DC6', 'DC9', 'DC8', 'DC5', 'DC4', 'DC1', 'DC3', 'C127', 'C126', 'DC2', 'C128', 'C125', 'C123', 'C124', 'C121', 'C120', 'C119', 'C118', 'C117', 'C122', '3Ld10', '5Ld8', '8Rd7', '4Rd8', '4Rd7', '4Rd6', '4Rd5', '4Rd4', '4Rd3', '4Rd1', '2Rd8', '4Rd2', '2Rd7', '2Rd6', '2Rd5', '2Rd4', '2Rd3', '2Rd2'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
 patient(pID).contra_region(1).lfpnum = [3,11];%hippocampal CA fields - Martina: 3 (2Rd2) in CA1, maybe 4 (2Rd4) but mainly in wm,
 patient(pID).contra_region(2).lfpnum = 2;% dentate gyrus - Martina: 2 (Rd1)DG
 patient(pID).contra_region(3).lfpnum = 38;%parahippocampal gyrus - Martina: 38 (10Rd1) in PHC gray matter, 39 (10Rd2) in cingulum wm
@@ -614,9 +614,9 @@ patient(pID).ipsi_region(4).lfpnum = [];%stim channels 2[c] and 3[a]
 patient(pID).ipsi_region(5).lfpnum = [10,15,9];% all hippocampal regions - Martina: 8 (3Ld1) parasuibulum/EC, 9 (3Ld2) subiculum/CA3, 10 (3Ld3) subiculum/CA1, 15 (5Ld1) potentially pre/parasubiculum
 patient(pID).ipsi_region(6).lfpnum = []; %entorhinal cortex channels - Martina: 1 (1Ld1) EC/BLVM amyg, 
 patient(pID).ipsi_region(7).lfpnum = [];%perirhinal cortex channels
-patient(pID).removeChannels{1} = {'5Ld2', '5Ld16', '5Ld15', '5Ld14', '5Ld10', '5Ld9', '5Ld11', '5Ld12', '5Ld13', '7Ld8', '9Ld10', '13Ld1', '25Ld3', '31Ld1', 'Pleth', 'PR', 'OSAT', 'TRIG', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'DC5', 'DC4', 'C128', 'DC3', 'DC2', 'C126', 'C125', 'DC1', 'C124', 'C127', 'EKG', '23Ld8', '21Ld7', '21Ld2', '17Ld6', '5Ld1', '1Ld3', '1Ld2', '1Ld9', '3Ld4', '3Ld3', '3Ld2', '3Ld1'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
-patient(pID).removeChannels{2} = {}; % no imm test for this subject, leave blank
-patient(pID).removeChannels{3} = {'5Ld BF10', '5Ld BF9', '5Ld BF8', '5Ld BF15', '7Ld6', '9Ld4', '11Ld6', 'TRIG', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'C128', 'EKG', 'DC11', 'Pleth', 'PR', 'OSAT', '23Ld10', '23Ld9', '23Ld8', '23Ld7', '23Ld5', '19Ld7', '21Ld1', '21Ld4', '15Ld7', '5Ld BF2', '1Ld9', '1Ld8', '1Ld10', '3Ld1', '3Ld5', '5Ld BF7', '5Ld BF6', '5Ld BF5', '3Ld6', '5Ld BF4', '5Ld BF3', '1Ld3', '1Ld4', '1Ld5', '1Ld1', '1Ld2'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
+patient(pID).phase(1).removeChannels.names = {'5Ld2', '5Ld16', '5Ld15', '5Ld14', '5Ld10', '5Ld9', '5Ld11', '5Ld12', '5Ld13', '7Ld8', '9Ld10', '13Ld1', '25Ld3', '31Ld1', 'Pleth', 'PR', 'OSAT', 'TRIG', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC11', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'DC5', 'DC4', 'C128', 'DC3', 'DC2', 'C126', 'C125', 'DC1', 'C124', 'C127', 'EKG', '23Ld8', '21Ld7', '21Ld2', '17Ld6', '5Ld1', '1Ld3', '1Ld2', '1Ld9', '3Ld4', '3Ld3', '3Ld2', '3Ld1'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
+patient(pID).phase(2).removeChannels.names = {}; % no imm test for this subject, leave blank
+patient(pID).phase(3).removeChannels.names = {'5LdBF10', '5LdBF9', '5LdBF8', '5LdBF15', '7Ld6', '9Ld4', '11Ld6', 'TRIG', 'DC16', 'DC15', 'DC14', 'DC13', 'DC12', 'DC10', 'DC9', 'DC8', 'DC7', 'DC6', 'DC5', 'DC4', 'DC3', 'DC2', 'DC1', 'C128', 'EKG', 'DC11', 'Pleth', 'PR', 'OSAT', '23Ld10', '23Ld9', '23Ld8', '23Ld7', '23Ld5', '19Ld7', '21Ld1', '21Ld4', '15Ld7', '5LdBF2', '1Ld9', '1Ld8', '1Ld10', '3Ld1', '3Ld5', '5LdBF7', '5LdBF6', '5LdBF5', '3Ld6', '5LdBF4', '5LdBF3', '1Ld3', '1Ld4', '1Ld5', '1Ld1', '1Ld2'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
 patient(pID).contra_region(1).lfpnum = [];%hippocampal CA fields
 patient(pID).contra_region(2).lfpnum = [];%DG
 patient(pID).contra_region(3).lfpnum = [];%PHG
@@ -962,10 +962,10 @@ for pIdx = 1:length(patient)
   patient(pIdx).contra_region(5).name = 'all contra hippocampus';
   patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
   patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
-  patient(pIdx).stimchan(1).num = [];
-  patient(pIdx).stimchan(2).num = [];
-  patient(pIdx).stimchan(3).num = [];
-  patient(pIdx).stimchan(4).num = [];
+  % patient(pIdx).stimchan(1).num = [];
+  % patient(pIdx).stimchan(2).num = [];
+  % patient(pIdx).stimchan(3).num = [];
+  % patient(pIdx).stimchan(4).num = [];
 
   patient(pIdx).phase(1).name = 'study';
   patient(pIdx).phase(2).name = 'immediate test';

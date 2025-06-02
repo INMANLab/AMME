@@ -32,18 +32,34 @@ for pIdx = 1:length(pList)
 
         dat = edfread(patientPath+string(filesep)+patient(pIdx).phase(phaseIdx).edfFile);
         datArray = convertTimetable2Array(dat,patient(pIdx).phase(phaseIdx).chNamesAll);
+        
+        %---------------------------------------------------> Preprocessing
+        
+        % ----------- Remove Undesired Channels
+        chIdx = true(1,size(datArray,2));
+        if(removeChannelsFlag)
+            chIdx(patient(pIdx).phase(phaseIdx).removeChannels.chIdx)=false;
+        else
+            chIdx(patient(pIdx).phase(phaseIdx).ExtraChannels.chIdx)=false; % ---> Index in the lfp sync file name
+        end
+        datArray = datArray(:,chIdx);
+        medlfp = median(datArray,2);
 
-        params.Fs=patient(p).samprate;
+        % ----------- Low Pass filter
+        params.Fs = patient(pIdx).samprate;
 
         lowcut = 1;
         highcut = 248;
-        [n,fo,mo,w] = remezord([lowcut-1 lowcut highcut highcut+1], [0 1 0], [1 1 1]*0.01, samprate);
+        % New Remezord Filter in Matlab is called from firpmord Func.
+        [n,fo,mo,w] = firpmord([lowcut-1 lowcut highcut highcut+1], [0 1 0], [1 1 1]*0.01, params.Fs);
+        b = firpm(n,fo,mo,w);
+        a=1;
         
-        %---------------------------------------------------> Preprocessing
-        if(removeChannelsFlag)
-            EEGdat = dat(patient(pIdx).removeChannelsIdx{phaseIdx});
-        end
-        medlfp = median(dat);
+        datArrayF = filtfilt(b,a, datArray);
+        medlfpF = median(datArrayF,2);
+        pwelch(medlfpF,[],[],[],params.Fs)
+
+        
 
         lfp = lfp-medlfp;
         lfp = rmlinesmovingwinc(lfp,[1.5 .5],10,params,.00000001,'n', 60);%remove 60 Hz noise
