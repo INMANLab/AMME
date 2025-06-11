@@ -944,125 +944,126 @@ patient(29).lfp_chan_count = 155 ;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 for pIdx = 1:length(patient)
-    if (~strcmp(patient(pIdx).exp,"Original"))
-        continue
-    end
+    % if (~strcmp(patient(pIdx).exp,"Original"))
+    %     continue
+    % end
 
-  patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
-  patient(pIdx).ipsi_region(2).name = 'ipsi DG';
-  patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
-  patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
-  patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
-  patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
-  patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-  patient(pIdx).contra_region(1).name = 'contra CA fields';
-  patient(pIdx).contra_region(2).name = 'contra DG';
-  patient(pIdx).contra_region(3).name = 'contra PHG';
-  patient(pIdx).contra_region(4).name = 'contra BLA';
-  patient(pIdx).contra_region(5).name = 'all contra hippocampus';
-  patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
-  patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
-  % patient(pIdx).stimchan(1).num = [];
-  % patient(pIdx).stimchan(2).num = [];
-  % patient(pIdx).stimchan(3).num = [];
-  % patient(pIdx).stimchan(4).num = [];
-
-  patient(pIdx).phase(1).name = 'study';
-  patient(pIdx).phase(2).name = 'immediate test';
-  patient(pIdx).phase(3).name = 'one-day test';
-  for ph = 1:3
-    patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
-    patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
-  end
-  patient(pIdx).phase(3).syncfn(4) = '2';%change the sync filename for one-day test to reflect day2 rather than day1
-
-  patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
-end
-
-%% this section is for AMME Timing patients (no immediate test)
-
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                 Set up the basic format of the                   %
-%                       "patient" structure                        %
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
- for pIdx = 1:length(patient)
-   if (~strcmp(patient(pIdx).exp,"Timing"))
-        continue
-   end
-  patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
-  patient(pIdx).ipsi_region(2).name = 'ipsi DG';
-  patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
-  patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
-  patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
-  patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
-  patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-  patient(pIdx).contra_region(1).name = 'contra CA fields';
-  patient(pIdx).contra_region(2).name = 'contra DG';
-  patient(pIdx).contra_region(3).name = 'contra PHG';
-  patient(pIdx).contra_region(4).name = 'contra BLA';
-  patient(pIdx).contra_region(5).name = 'all contra hippocampus';
-  patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
-  patient(pIdx).contra_region(7).name = 'all contra PRc';%perirhinal cortex channels
-  patient(pIdx).stimchan(1).num = [];
-  patient(pIdx).stimchan(2).num = [];
-  patient(pIdx).stimchan(3).num = [];
-  patient(pIdx).stimchan(4).num = [];
-
-  patient(pIdx).phase(1).name = 'study';
-  patient(pIdx).phase(3).name = 'one-day test';
-  for ph = [1,3] 
-    patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
-    patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
-  end
-  patient(pIdx).phase(3).syncfn(4) = '2';
-  
-  patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM> ???
- end
-
-
- %% this section is for AMME Duration patients
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                 Set up the basic format of the                   %
-%                       "patient" structure                        %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-for pIdx = 1:length(patient)
-    if (~strcmp(patient(pIdx).exp,"Duration"))
-        continue
-    end
-      patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
-      patient(pIdx).ipsi_region(2).name = 'ipsi DG';
-      patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
-      patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
-      patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
-      patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
-      patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-      patient(pIdx).contra_region(1).name = 'contra CA fields';
-      patient(pIdx).contra_region(2).name = 'contra DG';
-      patient(pIdx).contra_region(3).name = 'contra PHG';
-      patient(pIdx).contra_region(4).name = 'contra BLA';
-      patient(pIdx).contra_region(5).name = 'all contra hippocampus';
-      patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
-      patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
-      patient(pIdx).stimchan(1).num = [];
-      patient(pIdx).stimchan(2).num = [];
-      patient(pIdx).stimchan(3).num = [];
-      patient(pIdx).stimchan(4).num = [];
+    patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
+    patient(pIdx).ipsi_region(2).name = 'ipsi DG';
+    patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
+    patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
+    patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
+    patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
+    patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
+    patient(pIdx).contra_region(1).name = 'contra CA fields';
+    patient(pIdx).contra_region(2).name = 'contra DG';
+    patient(pIdx).contra_region(3).name = 'contra PHG';
+    patient(pIdx).contra_region(4).name = 'contra BLA';
+    patient(pIdx).contra_region(5).name = 'all contra hippocampus';
+    patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
+    patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
+    % patient(pIdx).stimchan(1).num = [];
+    % patient(pIdx).stimchan(2).num = [];
+    % patient(pIdx).stimchan(3).num = [];
+    % patient(pIdx).stimchan(4).num = [];
     
-    
-      patient(pIdx).phase(1).name = 'study';
-      patient(pIdx).phase(2).name = 'immediate test';
-      patient(pIdx).phase(3).name = 'one-day test';
-      for ph = 1:3
+    patient(pIdx).phase(1).name = 'study';
+    patient(pIdx).phase(2).name = 'immediate test';
+    patient(pIdx).phase(3).name = 'one-day test';
+     
+    for ph = 1:3
         patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
         patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
-      end
-      patient(pIdx).phase(3).syncfn(4) = '2';%change the sync filename for one-day test to reflect day2 rather than day1
+    end
+    patient(pIdx).phase(3).syncfn(4) = '2';%change the sync filename for one-day test to reflect day2 rather than day1
     
-      patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
+    patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
 end
+
+% %% this section is for AMME Timing patients (no immediate test)
+% 
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %                 Set up the basic format of the                   %
+% %                       "patient" structure                        %
+% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%  for pIdx = 1:length(patient)
+%    if (~strcmp(patient(pIdx).exp,"Timing"))
+%         continue
+%    end
+%   patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
+%   patient(pIdx).ipsi_region(2).name = 'ipsi DG';
+%   patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
+%   patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
+%   patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
+%   patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
+%   patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
+%   patient(pIdx).contra_region(1).name = 'contra CA fields';
+%   patient(pIdx).contra_region(2).name = 'contra DG';
+%   patient(pIdx).contra_region(3).name = 'contra PHG';
+%   patient(pIdx).contra_region(4).name = 'contra BLA';
+%   patient(pIdx).contra_region(5).name = 'all contra hippocampus';
+%   patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
+%   patient(pIdx).contra_region(7).name = 'all contra PRc';%perirhinal cortex channels
+%   patient(pIdx).stimchan(1).num = [];
+%   patient(pIdx).stimchan(2).num = [];
+%   patient(pIdx).stimchan(3).num = [];
+%   patient(pIdx).stimchan(4).num = [];
+% 
+%   patient(pIdx).phase(1).name = 'study';
+%   patient(pIdx).phase(3).name = 'one-day test';
+%   for ph = [1,3] 
+%     patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
+%     patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
+%   end
+%   patient(pIdx).phase(3).syncfn(4) = '2';
+% 
+%   patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM> ???
+%  end
+% 
+% 
+%  %% this section is for AMME Duration patients
+% 
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% %                 Set up the basic format of the                   %
+% %                       "patient" structure                        %
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% for pIdx = 1:length(patient)
+%     if (~strcmp(patient(pIdx).exp,"Duration"))
+%         continue
+%     end
+%       patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
+%       patient(pIdx).ipsi_region(2).name = 'ipsi DG';
+%       patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
+%       patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
+%       patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
+%       patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
+%       patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
+%       patient(pIdx).contra_region(1).name = 'contra CA fields';
+%       patient(pIdx).contra_region(2).name = 'contra DG';
+%       patient(pIdx).contra_region(3).name = 'contra PHG';
+%       patient(pIdx).contra_region(4).name = 'contra BLA';
+%       patient(pIdx).contra_region(5).name = 'all contra hippocampus';
+%       patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
+%       patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
+%       patient(pIdx).stimchan(1).num = [];
+%       patient(pIdx).stimchan(2).num = [];
+%       patient(pIdx).stimchan(3).num = [];
+%       patient(pIdx).stimchan(4).num = [];
+% 
+% 
+%       patient(pIdx).phase(1).name = 'study';
+%       patient(pIdx).phase(2).name = 'immediate test';
+%       patient(pIdx).phase(3).name = 'one-day test';
+%       for ph = 1:3
+%         patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
+%         patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
+%       end
+%       patient(pIdx).phase(3).syncfn(4) = '2';%change the sync filename for one-day test to reflect day2 rather than day1
+% 
+%       patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
+% end
 
 %% Limit the data to only work on included participants
 includedPatients = readtable(RD+"FileInfoList.csv");

@@ -71,14 +71,14 @@ cd(cPath) %Return to the Current Path
 %% get Channel Name and Index
 pList = string(vertcat(patient.name));
 
-%%
 for pIdx = 1:length(pList)
     if(strcmp(patient(pIdx).exp,'Original'))
         indexOffset = 1;
     else
         indexOffset = 0;
     end
-    patient(pIdx).sync_chnum = indexOffset+patient(pIdx).sync_chnum ;
+
+    patient(pIdx).sync_chnum = indexOffset+patient(pIdx).sync_chnum;
     for stChIdx = 1:4
         patient(pIdx).stimchan(stChIdx).num = patient(pIdx).stimchan(stChIdx).num+indexOffset;
     end
@@ -90,6 +90,8 @@ for pIdx = 1:length(pList)
         chNamesAll = hdr.SignalLabels;
         chNamesAll = replace(chNamesAll," ","");
         patient(pIdx).phase(phaseIdx).chNamesAll = chNamesAll;
+        patient(pIdx).phase(phaseIdx).syncChIdx = patient(pIdx).sync_chnum;
+        patient(pIdx).phase(phaseIdx).syncChName = chNamesAll(patient(pIdx).sync_chnum);
         %-------------- find LPF channel names
         for regionIdx = 1:length(patient(pIdx).ipsi_region)
             if(~isempty(patient(pIdx).ipsi_region(regionIdx).lfpnum))
@@ -101,19 +103,35 @@ for pIdx = 1:length(pList)
 
         %-------------- find the index of the removing channels 
         chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).removeChannels.names);
-        [~,chIdx]=ismember(chNames,chNamesAll);
-        [~,eventChIdx]=ismember(lower(eventChName),lower(chNamesAll));
-        if(eventChIdx ~=0)
+        [~,chIdx] = ismember(chNames,chNamesAll);
+        [~,eventChIdx] = ismember(lower(eventChName),lower(chNamesAll));
+        
+        
+        if(eventChIdx ~= 0)
             disp("-------Event Channel Found")
             chIdx = [eventChIdx,chIdx];
             chNames = [chNamesAll(eventChIdx),chNames];
+        else
+            eventChIdx = [];
         end
-        if(~isempty(chIdx(chIdx==0)))
+
+        if(~isempty(chIdx(chIdx == 0)))
             warning("for patient: "+patient(pIdx).name+", phase: "+...
                     phaseIdx+", there are missing channel names: "+join(chNames(chIdx==0)))
         end
+        
         patient(pIdx).phase(phaseIdx).removeChannels.names = chNames;
         patient(pIdx).phase(phaseIdx).removeChannels.chIdx = chIdx;
+
+        if(phaseIdx <3) %Stim channels were used
+            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, horzcat(patient(1).stimchan.num));
+            patient(pIdx).phase(phaseIdx).extraChannels.chIdx = tempIdx;
+            patient(pIdx).phase(phaseIdx).extraChannels.names = chNamesAll(tempIdx)';
+        else %Stim channels not used
+            tempIdx = horzcat(eventChIdx,patient(pIdx).phase(phaseIdx).syncChIdx);
+            patient(pIdx).phase(phaseIdx).extraChannels.chIdx = tempIdx;
+            patient(pIdx).phase(phaseIdx).extraChannels.names = chNamesAll(tempIdx)';
+        end
     end
 end
 
