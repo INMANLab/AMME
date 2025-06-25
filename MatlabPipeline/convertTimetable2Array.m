@@ -1,4 +1,4 @@
-function datArray = convertTimetable2Array(dat,chNames)
+function datArray = ConvertTimetable2Array(dat,chNames)
 
 datArray = [];
 for chIdx = 1:length(chNames)

@@ -1,4 +1,9 @@
 %% Original Group
+
+RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+
+cPath = pwd;
+cd(RDD) %go to Raw Data directory
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % %                 Find the median lfp of all lfps                  %
 % %                 global median can be used later                  %
@@ -82,7 +87,7 @@ for p = 1:length(patient)
   %hard-coded here to get 10 seconds (-5 to +5 around image onset)
   sampsbefore = round(patient(p).samprate * 5);
   sampsafter = round(patient(p).samprate * 5);
-  for ph=3
+  for ph=1
     fprintf('\t\tPhase %d...\n',ph)
     if(ph<3)
       d=1;
@@ -108,8 +113,31 @@ for p = 1:length(patient)
 
         %subtract median lfp from this lfp--same as digitally re-referencing
         lfp = lfp-medlfp;
+        lfp0 = lfp;
         lfp = rmlinesmovingwinc(lfp,[1.5 .5],10,params,.00000001,'n', 60);%remove 60 Hz noise
         lfp = rmlinesmovingwinc(lfp,[2 1],10,params,.00000001,'n', 42);%remove 42 Hz noise (source?); use [2 1] since not as bad
+
+%%
+        wo = 60/(params.Fs/2);  
+        bw = wo/35;
+        % [bN60,aN60] = iirnotch(wo,bw);
+        [bN60,aN60] = designNotchPeakIIR(Response="notch",FilterOrder=20,CenterFrequency=wo,Bandwidth=bw);
+        wo = 42/(params.Fs/2);  
+        bw = wo/35;
+        % [bN42,aN42] = iirnotch(wo,bw);
+        [bN42,aN42] = designNotchPeakIIR(Response="notch",FilterOrder=20,CenterFrequency=wo,Bandwidth=bw);
+
+        B = filtfilt(bN60,aN60, lfp0);
+        B = filtfilt(bN42,aN42, B);
+
+        % [S,f] = mtspectrumsegc(datReRef(:,channelPlot),movingwin(1),params);
+        [Sc1,fc1] = mtspectrumsegc(lfp0,movingwin(1),params);
+        [Sc2,fc2] = mtspectrumsegc(lfp,movingwin(1),params);
+        [Sc3,fc3] = mtspectrumsegc(B,movingwin(1),params);
+        figure
+        plot(fc1,10*log10(Sc1),fc2,10*log10(Sc2),fc3,10*log10(Sc3));
+        legend("Band-Passed","MT","Notch")
+%%
 
         for t = 1:length(patient(p).phase(ph).trial)
           try
