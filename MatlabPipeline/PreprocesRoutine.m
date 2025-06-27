@@ -40,7 +40,7 @@ switch processIdentifier
         dat = dat - medVal;
 
     case "Bandpass" %############################ Bandpass
-        % % "BandpassBT"
+        % "BandpassButterWorth"
         % %------------ Set the parameters 
         % lowCut = parameters.Bandpass.FcLow;
         % highCut = parameters.Bandpass.FcHigh;
@@ -51,7 +51,7 @@ switch processIdentifier
         % %------------- Apply the filter
         % dat = filtfilt(b,a, dat);
 
-        % % "BandpassRM"
+        % "BandpassRemezord"  Has linear phase and sharper amplitude response
         %------------ Set the parameters
         lowCut = parameters.Bandpass.FcLow;
         highCut = parameters.Bandpass.FcHigh;
@@ -71,7 +71,7 @@ switch processIdentifier
         dat = filtfilt(b,a, dat);
 
     case "Bandstop" %############################ Bandstop
-
+        % Multitaper method from Chronux
         %---------------iteratively apply filters
         for idx = 1:length(parameters.BandStop.Fc)
             %------------ Set the parameters
