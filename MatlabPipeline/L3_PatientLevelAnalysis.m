@@ -14,16 +14,17 @@ removeChannelsFlag = true;
 parameters.Fs = []; % fill it with each patients data
 
 %-------------------------------- Order of doing the preprocess steps
-parameters.preprocessStepOrder = ["Resample","Rerefrence","Bandpass","Bandstop"];
+parameters.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
 
 %-------------------------------- Bandpass
 parameters.Bandpass.FcLow = .6;
-parameters.Bandpass.FcHigh = 448;
+parameters.Bandpass.FcHigh = 250;
 parameters.Bandpass.rippleStop = 0.005;
 parameters.Bandpass.ripplePass = 0.005;
 
 %-------------------------------- Resample
 parameters.Resample.FsRes = 500;
+parameters.Resample.Method = "pchip"; %Shape-preserving piecewise cubic interpolation is better than linear
 %-------------------------------- Bandstop
 parameters.BandStop.tapers = [1, 1; 1, 1];
 parameters.BandStop.Fpass = [1, 115; 1, 115];
