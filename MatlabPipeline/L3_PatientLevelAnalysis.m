@@ -68,58 +68,9 @@ for pIdx = 1:length(pList)
         datArray = datArray(:,chIdx);
 
         %---------------------------------------------------> Preprocessing
-        dat0 = datArray;
-
-        parameters.preprocessStepOrder = ["Bandpass","Resample", "Rerefrence", "Bandstop"];
         parameters.Fs = Fs; 
-
         datF = PreprocesRoutine(datArray, parameters);
-
-
-        parameters.preprocessStepOrder = ["Bandpass", "Rerefrence", "Bandstop","Resample"];
-
-        datF2 = PreprocesRoutine(dat0, parameters);
-        
-        % patient(pIdx).phase(phaseIdx).samprate = FsRes;
-
-        Fs1 = 500;
-        Fs2 = 500;
-        channelPlot = 28;
-        clf
-        subplot 311
-        hold on
-        t = (0:1/Fs:10);
-        plot(t, dat0(1:length(t),channelPlot)-mean(dat0(1:length(t),channelPlot)));
-        t = (0:1/Fs1:10);
-        plot(t, datF(1:length(t),channelPlot));
-        t = (0:1/Fs2:10);
-        plot(t, datF2(1:length(t),channelPlot));
-        legend("dat0","dat1","dat2")
-
-        params.fpass = [1 120]; % band of frequencies to be kept
-        params.tapers = [1 1]; % taper parameters
-        params.pad = 1; % It should be based on the sampling frequency for each patient
-        params.err = [2 0.05];
-        params.trialave = 1;
-        movingwin = [.5 .05];
-
-        params.Fs = Fs;
-        [Sc1,fc1] = mtspectrumsegc(dat0(:,channelPlot)-mean(dat0(:,channelPlot)),movingwin(1),params);
-        params.Fs = Fs1;
-        [Sc2,fc2] = mtspectrumsegc(datF(:,channelPlot),movingwin(1),params);
-        params.Fs = Fs2;
-        [Sc3,fc3] = mtspectrumsegc(datF2(:,channelPlot),movingwin(1),params);
-        subplot 312
-        plot(fc1,10*log10(Sc1),fc2,10*log10(Sc2),fc3,10*log10(Sc3));
-        legend("dat0","dat1","dat2")
-
-        subplot 313
-        hold on
-        pwelch(dat0(:,channelPlot)-mean(dat0(:,channelPlot)),[],[],[],Fs)
-        pwelch(datF(:,channelPlot),[],[],[],Fs1)
-        pwelch(datF2(:,channelPlot),[],[],[],Fs2)
-        xlim([0,120])
-        legend("dat0","dat1","dat2")
+        patient(pIdx).phase(phaseIdx).samprate = parameters.Resample.FsRes;
 
     end
     
