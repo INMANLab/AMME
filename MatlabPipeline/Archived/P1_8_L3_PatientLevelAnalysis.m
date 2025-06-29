@@ -12,10 +12,8 @@ addpath(genpath(ChronuX_path));
 %-------- load patient Structure
 load(WR+"PatientStructL2");
 
-% Important Note 
-% All the channel indeces has to be based on the EDF file
 %################################ preprocessing parameters
-removeChannelsFlag = true; %Whether All specified channels being excluded from Median or not
+removeChannelsFlag = true;
 parPrep.Fs = []; % fill it with each patients data
 
 %-------------------------------- Order of doing the preprocess steps
@@ -46,8 +44,8 @@ parPrep.BandStop.err = [2, 0.05; 2, 0.05];
 parPrep.BandStop.trialave = [0; 0];
 
 %################################ Epoching parameters
-parEpoch.preStim = 5; % In seconds before stimilus onset
-parEpoch.postStim = 5; % In seconds after stimilus onset
+parEpoch.preStim = 5; % In seconds before stim
+parEpoch.postStim = 5; % In seconds after stim
 
 %################################ Epoching parameters
 % tempindex = round(patient(p).phase(ph).trial(t).start_time*patient(p).samprate);
@@ -64,7 +62,7 @@ parEpoch.postStim = 5; % In seconds after stimilus onset
 %% Load the EEG, Preprocess and Analyze
 pList = string(vertcat(patient.name));
 
-for pIdx = 1:length(pList)
+for pIdx = 1:8 %1:length(pList)
     disp("Working on patient: "+string(patient(pIdx).name))
     patientPath = RDD+string(patient(pIdx).name);
     for phIdx = [1,3]
@@ -94,7 +92,7 @@ for pIdx = 1:length(pList)
         % patient(pIdx).phase(phIdx).chNamesKept = patient(pIdx).phase(phIdx).chNamesAll(chIdx);
         % datArray = datArray(:,chIdx);
         parPrep.ReReference.chIdx = chIdx;
-        patient(pIdx).phase(phIdx).chNamesKept = chIdx;
+
         %% -------------> Preprocessing
         parPrep.Fs = Fs; 
         datArray = PreprocesRoutine(datArray, parPrep);
@@ -121,10 +119,13 @@ for pIdx = 1:length(pList)
                 patient(pIdx).phase(phIdx).trial(tIdx).region(rgIdx).lfp = lfpTemp;
             end
         end
+
     end
+    save(WR+"PatientStructL3_1upto"+pIdx,"patient");
 end
 %% Save the data
-save(WR+"PatientStructL3","patient");
+% patient1 = patient;
+% save(WR+"PatientStructL3_1","patient1");
 
 
         

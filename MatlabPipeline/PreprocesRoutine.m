@@ -30,13 +30,14 @@ disp("Step"+ step+":" + processIdentifier)
 switch processIdentifier
     case "Resample" %############################ Resample
         FsRes = parameters.Resample.FsRes;
+        Method = parameters.Resample.Method;
         t = (0:(size(dat, 1) - 1))/Fs;
-        dat = resample(dat, t, FsRes);
+        dat = resample(dat, t, FsRes, Method);
         
         parameters.Fs = FsRes;  % Update Fs with the resampling frequency
 
     case "Rerefrence" %############################ ReReference
-        medVal = median(dat,2);
+        medVal = median(dat(:,parameters.ReReference.chIdx),2);
         dat = dat - medVal;
 
     case "Bandpass" %############################ Bandpass
