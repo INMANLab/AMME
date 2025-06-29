@@ -49,18 +49,6 @@ parPrep.BandStop.trialave = [0; 0];
 parEpoch.preStim = 5; % In seconds before stimilus onset
 parEpoch.postStim = 5; % In seconds after stimilus onset
 
-%################################ Epoching parameters
-% tempindex = round(patient(p).phase(ph).trial(t).start_time*patient(p).samprate);
-% tmplfp = lfp(tempindex-sampsbefore:tempindex+sampsafter-1);
-% origsecsbefore = 5;%how many seconds worth of data saved in patient structure prior to image onset
-% secstouse = .5;%how many seconds of each trial to use
-% origsampsbefore = round(patient(p).samprate * origsecsbefore);
-% 
-% startind = origsampsbefore+round(patient(p).samprate/10);%1/10th sec after image onset
-% stopind =  origsampsbefore+round(patient(p).samprate/10) +round(patient(p).samprate * secstouse);%after image onset, total = secstouse secs plus 100 ms
-% prestartind = origsampsbefore-round(patient(p).samprate/10)-round(patient(p).samprate * secstouse);%secstouse plus 100 ms before image onset
-% prestopind =  origsampsbefore-round(patient(p).samprate/10);%1/10th sec before image onset
-
 %% Load the EEG, Preprocess and Analyze
 pList = string(vertcat(patient.name));
 
