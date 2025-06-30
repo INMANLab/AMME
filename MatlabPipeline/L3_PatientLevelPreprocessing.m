@@ -1,11 +1,14 @@
 %% Initialization
 clear;
 clc;
+%-----------Raw Data Path
 RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+%-----------Read Processed Data from:
 RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+%-----------Write Processed Data to:
 WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
-%---------------- Add Required Toolboxes
 
+%---------------- Add Required Toolboxes
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %% Parameters

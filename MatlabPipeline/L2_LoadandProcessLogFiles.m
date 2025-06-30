@@ -1,9 +1,13 @@
 %% Initialization
 clear;
 clc;
+%-----------Raw Data Path
 RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+%-----------Read Processed Data from:
 RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+%-----------Write Processed Data to:
 WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+
 cPath = pwd;
 %% Parameters
 %-------- load file names information
