@@ -41,7 +41,7 @@ parPrep.Resample.Method = "pchip"; %Shape-preserving piecewise cubic interpolati
 parPrep.BandStop.tapers = [1, 1; 1, 1];
 parPrep.BandStop.Fpass = [1, 115; 1, 115];
 parPrep.BandStop.movingwin = [1.5, .5; 2, 1];
-parPrep.BandStop.Fc = [42; 60];
+parPrep.BandStop.Fc = [60; 42];
 parPrep.BandStop.tau = [10; 10];
 parPrep.BandStop.pVal = [1e-7; 1e-7];
 parPrep.BandStop.pad = [1; 1];
@@ -113,9 +113,14 @@ for pIdx = 1:length(pList)
             end
         end
     end
+
+    %% To Improve memory performance save and reload data _ Alternatively you can save each patient data separately which can be more efficient and concatenate them afterward.
+    save(WR+"PatientStructL3_p1to"+pIdx,"patient");
+    clear patient
+    load(WR+"PatientStructL3_p1to"+pIdx);
 end
 %% Save the data
-save(WR+"PatientStructL3","patient");
+save(WR+"PatientStructL3","patient","-v7.3");
 
 
         

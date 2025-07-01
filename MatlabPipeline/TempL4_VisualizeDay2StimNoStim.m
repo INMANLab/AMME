@@ -1,7 +1,12 @@
-%% Initialize
+%% Initialization
 clear;
-clc
-load("PatientStructwithEEG.mat")
+clc;
+%-----------Raw Data Path
+RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
+%-----------Read Processed Data from:
+RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
+%-----------Write Processed Data to:
+WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 
 %% Relabel Trials to Stim and no Stim
 
