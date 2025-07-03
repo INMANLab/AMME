@@ -8,10 +8,13 @@ RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 %-----------Write Processed Data to:
 WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 
-%% Parameters
-%-------- load patient Structure
-load(WR+"PatientStructL3");
+%################################ Add Required Toolboxes
+ChronuX_path = "D:\Toolboxes\chronux_2_12";
+addpath(genpath(ChronuX_path));
 
+%################################ load patient Structure
+load(WR+"PatientStructL3");
+%% Parameters
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
 parTime.postStimOffset = 1/10; % 1/10th sec after image onset
@@ -46,8 +49,6 @@ multitaperPar.pVal = 1e-7;
 multitaperPar.pad = 1;
 multitaperPar.err = [2, 0.05];
 multitaperPar.trialave = 0;
-
-
 
 %################################ Region Parameters
 regionNames = ["CA";... % "ipsi CA fields"
