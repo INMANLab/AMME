@@ -68,7 +68,7 @@ includeRegions = [true;... % "ipsi CA fields"
 %% Compute Trial Level Power and Coherency 
 pList = string(vertcat(patient.name));
 
-for pIdx = 19:length(pList)
+for pIdx = 1:length(pList)
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
     for phIdx = [1,3]
 %        %% Data Table
@@ -114,5 +114,14 @@ for pIdx = 19:length(pList)
 
     end
 end
+%% Remove the trial Data
+for pIdx = 1:length(pList)
+    disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
+    for phIdx = [1,3]
+        tempDat = patient(pIdx).phase(phIdx).trial;
+        tempDat = rmfield(tempDat,"region");
+        patient(pIdx).phase(phIdx).trial = tempDat;
+    end
+end
 %% Save the data
-save(WR+"PatientStructL4","patient","-v7.3");
+save(WR+"PatientStructL4Small","patient","-v7.3");
