@@ -58,7 +58,6 @@ for pIdx = par.PatientList
     
         values = db(values2)-db(values1);
     
-    
         datRes.Patient = repmat(string(patient(pIdx).name), size(datRes,1),1);
         datRes.Phase = repmat(phIdx, size(datRes,1),1);
         datRes.Measure = repmat(par.Measure, size(datRes,1),1);
@@ -70,5 +69,4 @@ for pIdx = par.PatientList
     writetable(datRes,WR+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv")
 end
 save(WR+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
-%% Save the data
-% save(WR+"PatientStructL4","patient","-v7.3");
+
