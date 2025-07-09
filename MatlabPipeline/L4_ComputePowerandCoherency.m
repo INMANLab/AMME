@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(WR+"PatientStructL3");
+load(RD+"PatientStructL3");
 %% Parameters
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
@@ -98,20 +98,6 @@ for pIdx = 1:length(pList)
                                                          regionInfo(availableRegions), parTime, multitaperPar);
         patient(pIdx).phase(phIdx).Results = results;
 
-
-        % df = 2*(length(temphiplfpdata(tt).lfp(:,1)))*params.tapers(2);%degrees of freedom = 2 * #trials * #tapers
-        % C = atanh(C)-(1/(df-2));%Fisher-transformed and bias corrected
-        % %first LFP spectra/power (Hippocampus)
-        % S1 = 10*(log10(S1)-psi(df/2)+log(df/2));%log transformed and bias corrected and X10 bel-->decibel
-        % %second LFP spectra/power (BLA)
-        % S2 = 10*(log10(S2)-psi(df/2)+log(df/2));%log transformed and bias corrected and X10 bel-->decibel
-        % %pre-trial basline
-        % preC = atanh(preC)-(1/(df-2));%Fisher-transformed and bias corrected
-        % preS1 = 10*(log10(preS1)-psi(df/2)+log(df/2));%log transformed and bias corrected and X10 bel-->decibel
-        % preS2 = 10*(log10(preS2)-psi(df/2)+log(df/2));%log transformed and bias corrected and X10 bel-->decibel
-        % tempmeanC = mean(C,2);
-        % diffC = C - preC;
-
     end
 end
 %% Remove the trial Data
@@ -124,4 +110,4 @@ for pIdx = 1:length(pList)
     end
 end
 %% Save the data
-save(WR+"PatientStructL4Small","patient","-v7.3");
+save(WR+"PatientStructL4","patient","-v7.3");

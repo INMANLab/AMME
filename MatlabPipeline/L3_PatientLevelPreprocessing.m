@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %% Parameters
 %-------- load patient Structure
-load(WR+"PatientStructL2");
+load(RD+"PatientStructL2");
 
 % Important Note 
 % All the channel indeces has to be based on the EDF file

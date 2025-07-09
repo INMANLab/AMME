@@ -13,7 +13,7 @@ cPath = pwd;
 %-------- load file names information
 fileInfo = readtable(RD+"FileInfoList.csv");
 %-------- load patient Structure
-load(WR+"PatientStructL1");
+load(RD+"PatientStructL1");
 
 eventChName = "Event";
 %% Add file Info to the patient Structure -> Only Study and Day2 are being used

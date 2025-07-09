@@ -13,10 +13,10 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(WR+"PatientStructL4Small");
+load(RD+"PatientStructL4Small");
 
-% patient = patient([1:9,11:24]);
-% DisplayPatientStructInfo(patient);
+
+DisplayPatientStructInfo(patient);
 
 %% Parameters
 % This routine extracts processed data for specified conditions from patient 
@@ -56,7 +56,7 @@ for pIdx = par.PatientList
         values = result.Value{measureIdx};
         values2 = values(freqIdx,:)';
     
-        values = db(values2)-db(values1);
+        values = values2-values1;% Values Already converted to db for power and fisher-z transformed for coherency
     
         datRes.Patient = repmat(string(patient(pIdx).name), size(datRes,1),1);
         datRes.Phase = repmat(phIdx, size(datRes,1),1);
