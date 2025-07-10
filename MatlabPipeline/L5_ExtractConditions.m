@@ -48,7 +48,7 @@ SavePatientsinSeparateFiles = false;
 par.Freqs = [0,100];
 par.PatientList = [1:24];
 par.Measure = "Coherency";
-par.Region = ["BLA_HPC"];
+par.Region = ["EC_HPC"|"HPC_EC"];
 par.Phase = 3;
 par.ChannelOrder = "1_1"; % For Coherency use "1_1"
 %% Extract Results
