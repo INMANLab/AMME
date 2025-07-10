@@ -29,7 +29,7 @@ DisplayPatientStructInfo(patient);
 %################################ Example Parameters for Power
 %-------- Control output CSV files
 FileNameStartWith = "Data_";
-SavePatientsinSeparateFiles = false;
+SavePatientsinSeparateFiles = false; % false -> Store in one csv | true -> Store separate csv for each patient
 
 %-------- Desired Results
 par.Freqs = [0,100];
