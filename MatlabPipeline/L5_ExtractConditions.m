@@ -11,26 +11,34 @@ WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\CSVOutput\";
 %################################ Add Required Toolboxes
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
-
 %################################ load patient Structure
 load(RD+"PatientStructL4");
-
-
 DisplayPatientStructInfo(patient);
-
 %% Parameters
 % This routine extracts processed data for specified conditions from patient 
 % structure for visualization or statistical analysis or exporting data.
 %################################ Parameters
-% Frequency 
-par.Freqs = [0,50];
-par.PatientList = [1:9,11:24];
+%-------- Control output CSV files
+FileNameStartWith = "Data_";
+SavePatientsinSeparateFiles = false;
+
+%-------- Desired Results
+par.Freqs = [0,100];
+par.PatientList = [1:24];
 par.Measure = "Power";
-par.Region = ["HPC","PHG","BLA"];
+par.Region = ["HPC","PHG","BLA","PRC","EC","CA","DG"];
 par.Phase = 3;
 par.ChannelOrder = "1"; % Don't change this for Coherency use "1_1"
 
+% "CA";... % "ipsi CA fields"
+% "DG";... % "ipsi DG"
+% "PHG";... % "ipsi PHG"
+% "BLA";... % "ipsi BLA"
+% "HPC";... % "all ipsi hippocampus"
+% "EC";...  % "all ipsi EC"
+% "PRC"];  % "all ipsi PRC"
 %% Extract Results
+datAll = table;
 for pIdx = par.PatientList
     dat = table;
     for rgIdx = 1:length(par.Region)
@@ -59,14 +67,25 @@ for pIdx = par.PatientList
         values = values2-values1;% Values Already converted to db for power and fisher-z transformed for coherency
     
         datRes.Patient = repmat(string(patient(pIdx).name), size(datRes,1),1);
+        datRes.Experiment = repmat(string(patient(pIdx).exp), size(datRes,1),1);
         datRes.Phase = repmat(phIdx, size(datRes,1),1);
         datRes.Measure = repmat(par.Measure, size(datRes,1),1);
         datRes.Region = repmat(par.Region(rgIdx), size(datRes,1),1);
         datRes.Values = values;
         dat = cat(1,dat,datRes);
     end
-    % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
-    writetable(datRes,WR+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv")
+
+    if(SavePatientsinSeparateFiles)
+        % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
+        writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
+    else
+        datAll = MergeTablesVertically(datAll,dat);
+    end
 end
-save(WR+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
+if(~SavePatientsinSeparateFiles)
+    writetable(datAll,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv")
+end
+save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
+
+
 
