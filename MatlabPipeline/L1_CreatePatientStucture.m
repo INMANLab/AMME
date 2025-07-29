@@ -23,6 +23,12 @@ patient(pID).ipsi_region(4).lfpnum = 128;%stimulated channels = 128 (monopolar)
 patient(pID).ipsi_region(5).lfpnum = [124,125];%region 5 = all possible hippocampus electrodes; see above for notes
 patient(pID).ipsi_region(6).lfpnum = [];%entorhinal cortex channels
 patient(pID).ipsi_region(7).lfpnum = [];%perirhinal cortex channels
+
+patient(pID).ipsi_region(8).lfpnum = [];% PNAS_1 
+patient(pID).ipsi_region(9).lfpnum = [];%PNAS_2
+patient(pID).ipsi_region(10).lfpnum = [];%PNAS_3
+patient(pID).ipsi_region(11).lfpnum = [];%PNAS_4 
+
 patient(pID).phase(1).removeChannels.names = {'RIFTFd8', 'RM1Cd7', 'RM1Cd8', 'RS1Id7', 'RM1ISd10', 'LMTGAd', 'RS1Id8', 'RS1Id1', 'RM1Id10'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
 patient(pID).phase(2).removeChannels.names = {'RIFTFd8', 'RM1Cd7', 'RM1Cd8', 'RS1Id7', 'RM1ISd10', 'LMTGAd', 'RS1Id8', 'RS1Id1', 'RM1Id10'}; % Channels that has to be removed before computing the median for phase = 2 (Day1_ImmTest)
 patient(pID).phase(3).removeChannels.names = {'RIFTFd8', 'RM1Cd8','RS1Cd1', 'RS1Id8', 'RS1Id1', 'RM1Id10', 'RM1ISd10','RFPd5','LMTGAd'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
@@ -50,6 +56,12 @@ patient(pID).ipsi_region(4).lfpnum = [127, 128];%stimulated channels = 127 & 128
 patient(pID).ipsi_region(5).lfpnum = [];%region 5 = all possible hippocampus electrodes; see above for notes
 patient(pID).ipsi_region(6).lfpnum = []; %entorhinal cortex channels
 patient(pID).ipsi_region(7).lfpnum = [];%perirhinal cortex channels
+
+patient(pID).ipsi_region(8).lfpnum = [];% PNAS_1 
+patient(pID).ipsi_region(9).lfpnum = [];%PNAS_2
+patient(pID).ipsi_region(10).lfpnum = [];%PNAS_3
+patient(pID).ipsi_region(11).lfpnum = [];%PNAS_4 
+
 patient(pID).phase(1).removeChannels.names = {'2LpRd8', 'LSMACd2', 'LSMACd1', 'LSPFs6', 'LPTs5', '5RpRd8', 'RSTGId7', 'RpHGd7', '6RpRd10', 'Lamyd3', 'LAmyd2'}; % Channels that has to be removed before computing the median for phase = 1 (Day1_Study)
 patient(pID).phase(2).removeChannels.names = {'2LpRd8', 'LSMACd2', 'LSMACd1', 'LSPFs6', 'LPTs5', '5RpRd8', 'RSTGId7', 'RpHGd7', '6RpRd10', 'Lamyd3', 'LAmyd2'}; % Channels that has to be removed before computing the median for phase = 2 (Day1_ImmTest)
 patient(pID).phase(3).removeChannels.names = {'LSMACd1', 'LSPFs6', 'LPTs5', '2LpRd8', '2RpRd4', '2RpRd2', '2RpRd5', 'RSTGId7', 'RpHGd7', '5RpRd8', '5RpRd7'}; % Channels that has to be removed before computing the median for phase = 3 (Day2)
@@ -958,6 +970,12 @@ for pIdx = 1:length(patient)
     patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
     patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
     patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
+    
+    patient(pIdx).ipsi_region(8).name = 'PNAS_CA1';
+    patient(pIdx).ipsi_region(9).name = 'PNAS_DG';
+    patient(pIdx).ipsi_region(10).name = 'PNAS'; 
+    patient(pIdx).ipsi_region(11).name = 'PNAS';
+
     patient(pIdx).contra_region(1).name = 'contra CA fields';
     patient(pIdx).contra_region(2).name = 'contra DG';
     patient(pIdx).contra_region(3).name = 'contra PHG';
