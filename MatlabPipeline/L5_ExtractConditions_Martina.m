@@ -4,9 +4,9 @@ clc;
 %-----------Raw Data Path
 RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
 %-----------Read Processed Data from:
-RD = "D:\Individuals\Martina\Data\Amme\MatlabPipeline\";
+RD = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\";
 %-----------Write Processed Data to:
-WR = "D:\Individuals\Martina\Data\Amme\MatlabPipeline\CSVOutput\";
+WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\CSVOutput\";
 
 %################################ Add Required Toolboxes
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
@@ -24,8 +24,8 @@ load(RD+"PatientStructL4NoEEG.mat");
 % Frequency 
 par.Freqs = [0,100];
 par.PatientList = [1:9,11:24];
-par.Measure = "Coherence";
-par.Region = ["HPC","PHG","BLA","PRC","EC","CA","DG"]; % alternatively we can specify combinations ["EC_HPC"|"HPC_EC"];
+par.Measure = "Coherency";
+par.Region = ["PHG_BLA", "PHG_HPC", "PHG_PRC", "BLA_HPC", "BLA_PRC"]; % alternatively we can specify combinations ["EC_HPC"|"HPC_EC"];
 par.Phase = 3;
 par.ChannelOrder = "1_1"; % for power, use "1", for Coherency use "1_1" for the first channel in the list
 

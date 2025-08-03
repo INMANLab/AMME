@@ -51,20 +51,29 @@ multitaperPar.err = [2, 0.05];
 multitaperPar.trialave = 0;
 
 %################################ Region Parameters
-regionNames = ["CA";... % "ipsi CA fields"
-               "DG";... % "ipsi DG"
+regionNames = ["CA";...  % "ipsi CA fields"
+               "DG";...  % "ipsi DG"
                "PHG";... % "ipsi PHG"
                "BLA";... % "ipsi BLA"
                "HPC";... % "all ipsi hippocampus"
                "EC";...  % "all ipsi EC"
-               "PRC"];  % "all ipsi PRC"
+               "PRC";... % "all ipsi PRC"
+               "PNAS_CA";... % CA region analyzed in the PNAS paper
+               "PNAS_DG";... % DG region analyzed in the PNAS paper
+               "PNAS_PRC";... % PRC region analyzed in the PNAS paper
+               "PNAS_BLA"];  % BLA region analyzed in the PNAS paper
+
 includeRegions = [true;... % "ipsi CA fields"
                   true;... % "ipsi DG"
                   true;... % "ipsi PHG"
                   true;... % "ipsi BLA"
                   true;... % "all ipsi hippocampus"
-                  true;...  % "all ipsi EC"
-                  true];  % "all ipsi PRC"
+                  true;... % "all ipsi EC"
+                  true;... % "all ipsi PRC"
+                  true;... % CA region analyzed in the PNAS paper
+                  true;... % DG region analyzed in the PNAS paper
+                  true;... % PRC region analyzed in the PNAS paper
+                  true];   % BLA region analyzed in the PNAS paper
 %% Compute Trial Level Power and Coherency 
 pList = string(vertcat(patient.name));
 

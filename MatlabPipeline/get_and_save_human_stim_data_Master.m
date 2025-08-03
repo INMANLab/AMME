@@ -148,11 +148,11 @@ patient(3).syncfn  = 'day1_lfp_128.mat';
 patient(3).samprate = 999.41211;
 patient(3).ipsi_region(1).lfpnum = 32;%32=CA2/DG per Jon; 31=CA3/DG per Jon (noisy); 30=SUB per Jon (though it is noisy)
 patient(3).ipsi_region(2).lfpnum = [];
-patient(3).ipsi_region(3).lfpnum = 33;%33 = parahippocampal (peri/para border) white matter near collateral eminence per Jon; 34 = PH cortex white matter near collateral sulcus per Jon
+patient(3).ipsi_region(3).lfpnum = [];%33 = parahippocampal (peri/para border) white matter near collateral eminence per Jon; 34 = PH cortex white matter near collateral sulcus per Jon
 patient(3).ipsi_region(4).lfpnum = [20,21];%stimulated channels = 20 & 21
 patient(3).ipsi_region(5).lfpnum = 32;%region 5 = all possible hippocampus electrodes; see above for notes
 patient(3).ipsi_region(6).lfpnum = []; %entorhinal cortex channels
-patient(3).ipsi_region(7).lfpnum = [];%perirhinal cortex channels
+patient(3).ipsi_region(7).lfpnum = 33;%perirhinal cortex channels
 patient(3).contra_region(1).lfpnum = [];
 patient(3).contra_region(2).lfpnum = [];
 patient(3).contra_region(3).lfpnum = [];
