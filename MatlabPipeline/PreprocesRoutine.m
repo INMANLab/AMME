@@ -88,8 +88,7 @@ switch processIdentifier
             tau = parameters.BandStop.tau(idx);
             movingwin = parameters.BandStop.movingwin(idx,:);
             %------------- Apply filter
-            dat = rmlinesmovingwinc(dat, movingwin, tau, params, pVal,'n', Fc);%remove 60 Hz noise
-
+            dat = rmlinesmovingwinc(dat, movingwin, tau, params, pVal,'n', Fc);
         end
 end
 %------ Increase step and Call back the preprocess routine until all steps

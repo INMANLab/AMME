@@ -12,7 +12,7 @@ WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\CSVOutput\";
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %################################ load patient Structure
-load(RD+"PatientStructL4");
+load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
 DisplayPatientStructInfo(patient);
 
 %------------ Name of regions for reference:
@@ -28,16 +28,17 @@ DisplayPatientStructInfo(patient);
 % structure for visualization or statistical analysis or exporting data.
 %################################ Example Parameters for Power
 %-------- Control output CSV files
-FileNameStartWith = "Data_";
-SavePatientsinSeparateFiles = false; % false -> Store in one csv | true -> Store separate csv for each patient
 
-%-------- Desired Results
-par.Freqs = [0,100];
-par.PatientList = [1:24];
-par.Measure = "Power";
-par.Region = ["HPC","PHG","BLA","PRC","EC","CA","DG"];
-par.Phase = 3;
-par.ChannelOrder = "1"; % For Power use "1"
+% FileNameStartWith = "Data_";
+% SavePatientsinSeparateFiles = false; % false -> Store in one csv | true -> Store separate csv for each patient
+% 
+% %-------- Desired Results
+% par.Freqs = [0,100];
+% par.PatientList = [1:24];
+% par.Measure = "Power";
+% par.Region = ["HPC","PHG","BLA","PRC","EC","CA","DG"];
+% par.Phase = 3;
+% par.ChannelOrder = "1"; % For Power use "1"
 
 %################################ Example Parameters for Coherency
 %-------- Control output CSV files
@@ -48,7 +49,7 @@ SavePatientsinSeparateFiles = false;
 par.Freqs = [0,100];
 par.PatientList = [1:24];
 par.Measure = "Coherency";
-par.Region = ["EC_HPC"|"HPC_EC"];
+par.Region = ["PHG","BLA", "HPC", "PRC"];
 par.Phase = 3;
 par.ChannelOrder = "1_1"; % For Coherency use "1_1"
 %% Extract Results
@@ -78,6 +79,8 @@ for pIdx = par.PatientList
         availableRGIdx = find(contains(availableRegions, par.Region(rgIdx)))';
         %-------- Check if Region is available in this patient
         if(isempty(availableRGIdx))
+            fprintf('⚠️ Warning! No results found for Patient = %s, Measure = %s, Region = %s\n'...
+                , patient(pIdx).name, par.Measure, par.Region{rgIdx});
             continue;
         end
         resultTemp = result;
@@ -105,12 +108,13 @@ for pIdx = par.PatientList
             datRes.Phase = repmat(phIdx, size(datRes,1),1);
             datRes.Measure = repmat(par.Measure, size(datRes,1),1);
             datRes.Region = repmat(availableRegions(aRGIdx), size(datRes,1),1);
-            datRes.Values = values;
+            % datRes.Values = values;
+            datRes(:, "Freq_"+string(round(freqVals,2))) = array2table(values);
             dat = cat(1,dat,datRes);
         end
         
     end
-
+    
     if(SavePatientsinSeparateFiles)
         % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
         writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
@@ -119,9 +123,9 @@ for pIdx = par.PatientList
     end
 end
 if(~SavePatientsinSeparateFiles)
-    writetable(datAll,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv")
+    writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
 end
-save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
+% save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
 
 
 

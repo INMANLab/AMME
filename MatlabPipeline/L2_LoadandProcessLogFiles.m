@@ -49,7 +49,9 @@ for pIdx = 1:length(patient)
         fprintf(' Could not find study session start times in %s...', fxn)
         patient(pIdx).phase(1).trial_start_times = [];%nada
     end
-    
+    if(~isempty(find(isnan(patient(pIdx).phase(1).trial_start_times))))
+        disp("Missing trials in study replaced with NaN")
+    end
     %load the appropriate lfp for the one-day (day #2) test sync file
     load(patient(pIdx).phase(3).syncfn)%load the lfp for the sync channel
     %get the sync pulse times for the ONE-DAY TEST session
@@ -63,6 +65,10 @@ for pIdx = 1:length(patient)
         patient(pIdx).phase(3).trial_start_times = [];%nada
     end
     clear lfp
+
+    if(~isempty(find(isnan(patient(pIdx).phase(3).trial_start_times))))
+        disp("Missing trials in day2 replaced with NaN")
+    end
 
     cd(cPath)
     % read Log Files
@@ -140,12 +146,6 @@ for pIdx = 1:length(pList)
 end
 
 
-% To Dos
-% Convert the EEG data timetable to array; --> Done
-% double check the indeces of the Event channel in the EEG array; ; --> Done
-% double check the indexings of the removing channels to be consistent with EEG array;
-% Check for Zero indeces that are missing or changed between days;
-% find the syncpulse channel name and index;
 %% Save the data
 cd(cPath) %Return to the Current Path
 save(WR+"PatientStructL2","patient");

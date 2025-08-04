@@ -1,7 +1,7 @@
 function dat = ReturnEEGArray(trialDat, rgIdx)
 % This function reads EEG data from the patient structure and convert it to
 % an array eegDat is structured: samples x trials x channels
-
+EEG = trialDat.region(:,rgIdx);
 try
     emptyTrials = cellfun(@isnan,{trialDat.start_time}); %Find and remove empty trials
 catch

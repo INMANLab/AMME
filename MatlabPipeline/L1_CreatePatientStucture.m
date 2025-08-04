@@ -1073,11 +1073,10 @@ for pIdx = 1:length(patient)
     patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
     patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
     patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-    
-    patient(pIdx).ipsi_region(8).name = 'PNAS_CA1';
+    patient(pIdx).ipsi_region(8).name = 'PNAS_CA';
     patient(pIdx).ipsi_region(9).name = 'PNAS_DG';
-    patient(pIdx).ipsi_region(10).name = 'PNAS'; 
-    patient(pIdx).ipsi_region(11).name = 'PNAS';
+    patient(pIdx).ipsi_region(10).name = 'PNAS_PRC'; 
+    patient(pIdx).ipsi_region(11).name = 'PNAS_BLA';
 
     patient(pIdx).contra_region(1).name = 'contra CA fields';
     patient(pIdx).contra_region(2).name = 'contra DG';

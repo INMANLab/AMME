@@ -13,7 +13,8 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(RD+"PatientStructL3");
+% load(RD+"PatientStructL3");
+load(RD+"PatientStructL3_MartinaChannels_p1");
 %% Parameters
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
@@ -81,7 +82,8 @@ for pIdx = 1:length(pList)
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
     for phIdx = [1,3]
 %        %% Data Table
-        datRes = struct2table(patient(pIdx).phase(phIdx).trial);
+        % datRes = struct2table(patient(pIdx).phase(phIdx).trial);
+        datRes = patient(pIdx).phase(phIdx).trial;
  %       %% Extract EEG data
         regionInfo = patient(pIdx).phase(phIdx).ipsi_region;
 

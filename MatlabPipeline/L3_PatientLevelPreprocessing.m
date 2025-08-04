@@ -15,21 +15,22 @@ addpath(genpath(ChronuX_path));
 %-------- load patient Structure
 load(RD+"PatientStructL2");
 
-% Important Note 
+% Important Note
 % All the channel indeces has to be based on the EDF file
 %################################ preprocessing parameters
-removeChannelsFlag = true; %Whether All specified channels being excluded from Median or not
+removeChannelsFlag = false; %Whether All specified channels being excluded from Median or not
 parPrep.Fs = []; % fill it with each patients data
-
+phaseToProcess = 3;%[1,3];
 %-------------------------------- Order of doing the preprocess steps
 parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
+% parPrep.preprocessStepOrder = ["Resample","Bandpass","Bandstop","Rerefrence"];
 
 %-------------------------------- Re-Reference
 parPrep.ReReference.chIdx = []; % channels to include in median
 
 %-------------------------------- Bandpass
 parPrep.Bandpass.FcLow = 1;
-parPrep.Bandpass.FcHigh = 200;
+parPrep.Bandpass.FcHigh = 150;
 parPrep.Bandpass.rippleStop = 0.01;
 parPrep.Bandpass.ripplePass = 0.01;
 
@@ -58,9 +59,9 @@ pList = string(vertcat(patient.name));
 for pIdx = 1:length(pList)
     disp("Working on patient: "+string(patient(pIdx).name))
     patientPath = RDD+string(patient(pIdx).name);
-    for phIdx = [1,3]
+    for phIdx = phaseToProcess
         disp("Preprocessing Phase: "+phIdx)
-        
+
         %% -------------> Load EDF Data
         dat = edfread(patientPath+string(filesep)+patient(pIdx).phase(phIdx).edfFile);
         info = edfinfo(patientPath+string(filesep)+patient(pIdx).phase(phIdx).edfFile);
@@ -68,13 +69,22 @@ for pIdx = 1:length(pList)
         patient(pIdx).phase(phIdx).samprateEDF = Fs;
         if(length(Fs)>1)
             warning("for patient: "+patient(pIdx).name+", phase: "+...
-                    phIdx+", there descrepent sampling rates: "+Fs)
+                phIdx+", there descrepent sampling rates: "+Fs)
         end
         chNamesFixed = patient(pIdx).phase(phIdx).chNamesAll;
         nameFixIdx = startsWith(chNamesFixed,digitsPattern);
         chNamesFixed(nameFixIdx) = "x"+chNamesFixed(nameFixIdx);
         datArray = ConvertTimetable2Array(dat,chNamesFixed);
-        
+        %% -------------> Pick required samples
+        tEnd = round(max(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs+10*60*Fs); %with 5 minutes margin
+        tStart = round(min(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs-10*60*Fs); %with 5 minutes margin
+        if(tStart<=0)
+            tStart = 1;
+        end
+        if(tEnd>size(datArray,1))
+            tEnd=size(datArray,1);
+        end
+        datArrayShort = datArray(tStart:tEnd,:);
         %% -------------> Find Index of Channels for Median
         chIdx = true(1,size(datArray,2));
         if(removeChannelsFlag)
@@ -87,15 +97,36 @@ for pIdx = 1:length(pList)
         parPrep.ReReference.chIdx = chIdx;
         patient(pIdx).phase(phIdx).chNamesKept = chIdx;
         %% -------------> Preprocessing
-        parPrep.Fs = Fs; 
+        parPrep.Fs = Fs;
         datArray = PreprocesRoutine(datArray, parPrep);
         patient(pIdx).phase(phIdx).samprate = parPrep.Resample.FsRes;
-        
+
+        % figure
+        % subplot 211
+        % hold on
+        % params.fpass = [1 120]; % band of frequencies to be kept
+        % params.tapers = [3 5]; % taper parameters
+        % params.pad = 1; % It should be based on the sampling frequency for each patient
+        % params.Fs = 400;
+        % [Sc1,fc1] = mtspectrumsegc(datArray(:,10),.5,params);
+        % plot(fc1,10*log10(Sc1));
+        %
+        % params.fpass = [1 120]; % band of frequencies to be kept
+        % params.tapers = [3 5]; % taper parameters
+        % params.pad = 1; % It should be based on the sampling frequency for each patient
+        % params.Fs = Fs;
+        % [Sc1,fc1] = mtspectrumsegc(datArray(:,10),.5,params);
+        % plot(fc1,10*log10(Sc1));
+        %
+        % subplot 212
+        % hold on
+        % pwelch(datArray(:,10),[],[],[],400)
+        % pwelch(datArray(:,10),[],[],[],Fs)
         %% -------------> Epoching
         Fs = patient(pIdx).phase(phIdx).samprate;
-        
-        for tIdx = 1:length(patient(pIdx).phase(phIdx).trial)
-            stimIdx = round(patient(pIdx).phase(phIdx).trial(tIdx).start_time*Fs);
+
+        for tIdx = 1:size(patient(pIdx).phase(phIdx).trial,1)
+            stimIdx = round(patient(pIdx).phase(phIdx).trial.start_time(tIdx)*Fs)-tStart+1;
             if(isnan(stimIdx))
                 continue;
             end
@@ -109,18 +140,21 @@ for pIdx = 1:length(pList)
                     datEpoch = datArray(startIdx:endIdx,chNum);
                     lfpTemp = cat(2,lfpTemp,datEpoch);
                 end
-                patient(pIdx).phase(phIdx).trial(tIdx).region(rgIdx).lfp = lfpTemp;
+                % region(rgIdx).lfp = lfpTemp;
+                % patient(pIdx).phase(phIdx).trial.region(tIdx).lfp(rgIdx) = lfpTemp;
+                patient(pIdx).phase(phIdx).trial.region(tIdx,rgIdx) = {lfpTemp};
             end
+            % patient(pIdx).phase(phIdx).trial.region(tIdx) = {region};
+            % clear region;
         end
     end
 
     %% To Improve memory performance save and reload data _ Alternatively you can save each patient data separately which can be more efficient and concatenate them afterward.
-    save(WR+"PatientStructL3_p1to"+pIdx,"patient");
+    save(WR+"PatientStructL3_Shortened_p"+pIdx,"patient");
     clear patient
-    load(WR+"PatientStructL3_p1to"+pIdx);
+    load(RD+"PatientStructL2");
 end
 %% Save the data
-save(WR+"PatientStructL3","patient","-v7.3");
+% save(WR+"PatientStructL3","patient","-v7.3");
 
 
-        
