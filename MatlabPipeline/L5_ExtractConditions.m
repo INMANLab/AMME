@@ -43,15 +43,15 @@ DisplayPatientStructInfo(patient);
 %################################ Example Parameters for Coherency
 %-------- Control output CSV files
 FileNameStartWith = "Data_";
-SavePatientsinSeparateFiles = true; % false creates one large file and true creates one file for each patient
+SavePatientsinSeparateFiles = false; % false creates one large file and true creates one file for each patient
 
 %-------- Desired Results
 par.Freqs = [0,100];
 par.PatientList = [1:24];
-par.Measure = "Coherency";
+par.Measure = "Power";
 par.Region = ["PHG","BLA", "HPC", "PRC"];
 par.Phase = 3;
-par.ChannelOrder = "1_1"; % For Coherency use "1_1"
+par.ChannelOrder = "1"; % For Coherency use "1_1"
 %% Extract Results
 datAll = table;
 for pIdx = par.PatientList
@@ -66,6 +66,7 @@ for pIdx = par.PatientList
         continue;
     end
     result = result(result.Measure == par.Measure, :);
+    result.ChOrder = string(result.ChOrder);
     %-------- Check if Channel is available in this patient
     if(~ismember(par.ChannelOrder, unique(result.ChOrder)))
         continue;
@@ -109,7 +110,9 @@ for pIdx = par.PatientList
             datRes.Measure = repmat(par.Measure, size(datRes,1),1);
             datRes.Region = repmat(availableRegions(aRGIdx), size(datRes,1),1);
             % datRes.Values = values;
-            datRes(:, "Freq_"+string(round(freqVals,2))) = array2table(values);
+            datRes(:, "pre_Freq_"+string(round(freqVals,2))) = array2table(values1); %pre
+            datRes(:, "post_Freq_"+string(round(freqVals,2))) = array2table(values2); %post
+            datRes(:, "diff_Freq_"+string(round(freqVals,2))) = array2table(values); %baseline corrected for stim-nostim graph per region
             dat = cat(1,dat,datRes);
         end
         
@@ -125,7 +128,7 @@ end
 if(~SavePatientsinSeparateFiles)
     writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
 end
-% save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
+ save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
 
 
 
