@@ -80,12 +80,9 @@ includeRegions = [true;... % "ipsi CA fields"
                   true];   % BLA region analyzed in the PNAS paper
 %% Compute Trial Level Power and Coherency 
 for pIdx = 1:length(patient)
-    disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
+    disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(patient))
     for phIdx = phaseToProcess
-%        %% Data Table
-        % datRes = struct2table(patient(pIdx).phase(phIdx).trial);
-        datRes = patient(pIdx).phase(phIdx).trial;
- %       %% Extract EEG data
+        % Extract EEG data
         regionInfo = patient(pIdx).phase(phIdx).ipsi_region;
 
         availableRegions = ~cellfun(@isempty,{regionInfo.name}');
@@ -105,7 +102,7 @@ for pIdx = 1:length(patient)
             eegDat{rgIdx} = ReturnEEGArray(patient(pIdx).phase(phIdx).trial, rgIdx); 
         end
 
-   %     %% Compute Power and Coherency
+        % Compute Power and Coherency
         results = ComputePowerandCoherencyMultiTaper(eegDat(availableRegions), regionNames(availableRegions),...
                                                          regionInfo(availableRegions), parTime, multitaperPar);
         patient(pIdx).phase(phIdx).Results = results;
@@ -113,13 +110,16 @@ for pIdx = 1:length(patient)
     end
 end
 %% Remove the trial Data
-for pIdx = 1:length(pList)
-    disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
-    for phIdx = [1,3]
+for pIdx = 1:length(patient)
+    disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(patient))
+    for phIdx = phaseToProcess
         tempDat = patient(pIdx).phase(phIdx).trial;
-        tempDat = rmfield(tempDat,"region");
+        if(isstruct(tempDat))
+            tempDat = struct2table(tempDat);
+        end
+        tempDat = removevars(tempDat,"region");
         patient(pIdx).phase(phIdx).trial = tempDat;
     end
 end
 %% Save the data
-save(WR+"PatientStructL4","patient","-v7.3");
+save(WR+"PatientStructL4_Day2JoeChannels","patient","-v7.3");
