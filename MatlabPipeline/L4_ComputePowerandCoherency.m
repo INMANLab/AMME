@@ -14,8 +14,11 @@ addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
 % load(RD+"PatientStructL3");
-load(RD+"PatientStructL3_MartinaChannels_p1");
+load(RD+"PatientStructL3");
 %% Parameters
+%################################ Script Control Parameters
+phaseToProcess = 3;%[1,3];
+
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
 parTime.postStimOffset = 1/10; % 1/10th sec after image onset
@@ -76,11 +79,9 @@ includeRegions = [true;... % "ipsi CA fields"
                   true;... % PRC region analyzed in the PNAS paper
                   true];   % BLA region analyzed in the PNAS paper
 %% Compute Trial Level Power and Coherency 
-pList = string(vertcat(patient.name));
-
-for pIdx = 1:length(pList)
+for pIdx = 1:length(patient)
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
-    for phIdx = [1,3]
+    for phIdx = phaseToProcess
 %        %% Data Table
         % datRes = struct2table(patient(pIdx).phase(phIdx).trial);
         datRes = patient(pIdx).phase(phIdx).trial;

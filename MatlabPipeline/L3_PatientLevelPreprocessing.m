@@ -14,13 +14,16 @@ addpath(genpath(ChronuX_path));
 %% Parameters
 %-------- load patient Structure
 load(RD+"PatientStructL2");
+%################################ Script Control Parameters
+removeChannelsFlag = false; %Whether All specified channels being excluded from Median or not
+phaseToProcess = 3;%[1,3];
 
 % Important Note
 % All the channel indeces has to be based on the EDF file
 %################################ preprocessing parameters
-removeChannelsFlag = false; %Whether All specified channels being excluded from Median or not
 parPrep.Fs = []; % fill it with each patients data
-phaseToProcess = 3;%[1,3];
+
+
 %-------------------------------- Order of doing the preprocess steps
 parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
 % parPrep.preprocessStepOrder = ["Resample","Bandpass","Bandstop","Rerefrence"];
@@ -54,9 +57,7 @@ parEpoch.preStim = 5; % In seconds before stimilus onset
 parEpoch.postStim = 5; % In seconds after stimilus onset
 
 %% Load the EEG, Preprocess and Analyze
-pList = string(vertcat(patient.name));
-
-for pIdx = 1:length(pList)
+for pIdx = 1:length(patient)
     disp("Working on patient: "+string(patient(pIdx).name))
     patientPath = RDD+string(patient(pIdx).name);
     for phIdx = phaseToProcess
@@ -149,12 +150,22 @@ for pIdx = 1:length(pList)
         end
     end
 
-    %% To Improve memory performance save and reload data _ Alternatively you can save each patient data separately which can be more efficient and concatenate them afterward.
-    save(WR+"PatientStructL3_Shortened_p"+pIdx,"patient");
+    %% Saving Each patient
+    % To Improve memory performance save each patient data separately and 
+    % free-up memory at the end of the script they are being concatenated.
+    save(WR+"PatientStructL3_SinglePatient_p"+pIdx,"patient");
     clear patient
     load(RD+"PatientStructL2");
 end
-%% Save the data
-% save(WR+"PatientStructL3","patient","-v7.3");
+%% Load and Combine Separate Patient Data
+load(RD+"PatientStructL2");
+patientTemp = patient;
+for pIdx = 1:length(patient)
+    load(WR+"PatientStructL3_Shortened_p"+pIdx);
+    patientTemp(pIdx) = patient(pIdx);
+end
+clear patient;
+patient = patientTemp;
+save(WR+"PatientStructL3","patient","-v7.3");
 
 
