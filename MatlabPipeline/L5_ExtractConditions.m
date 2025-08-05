@@ -66,6 +66,7 @@ for pIdx = par.PatientList
         continue;
     end
     result = result(result.Measure == par.Measure, :);
+    result.ChOrder = string(result.ChOrder);  %----------> Why this happened?
     %-------- Check if Channel is available in this patient
     if(~ismember(par.ChannelOrder, unique(result.ChOrder)))
         continue;
@@ -109,7 +110,9 @@ for pIdx = par.PatientList
             datRes.Measure = repmat(par.Measure, size(datRes,1),1);
             datRes.Region = repmat(availableRegions(aRGIdx), size(datRes,1),1);
             % datRes.Values = values;
-            datRes(:, "Freq_"+string(round(freqVals,2))) = array2table(values);
+            datRes(:, "pre_Freq_"+string(round(freqVals,2))) = array2table(values1); %pre
+            datRes(:, "post_Freq_"+string(round(freqVals,2))) = array2table(values2); %post
+            datRes(:, "diff_Freq_"+string(round(freqVals,2))) = array2table(values); %baseline corrected for stim-nostim graph per region
             dat = cat(1,dat,datRes);
         end
         

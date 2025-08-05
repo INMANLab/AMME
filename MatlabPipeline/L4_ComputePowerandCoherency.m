@@ -13,8 +13,8 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-% load(RD+"PatientStructL3");
 load(RD+"PatientStructL3");
+
 %% Parameters
 %################################ Script Control Parameters
 phaseToProcess = 3;%[1,3];

@@ -23,7 +23,6 @@ phaseToProcess = 3;%[1,3];
 %################################ preprocessing parameters
 parPrep.Fs = []; % fill it with each patients data
 
-
 %-------------------------------- Order of doing the preprocess steps
 parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
 % parPrep.preprocessStepOrder = ["Resample","Bandpass","Bandstop","Rerefrence"];
