@@ -107,7 +107,7 @@ for ph=3%phase 2 and 3 = immediate and one-day tests, respectively
     %       strcmp(patient(p).name, 'amyg013') || ...
     %       strcmp(patient(p).name, 'amyg017') ...
     %       )
-    %     pctr = pctr + 1;%add one to patient-with-data counter
+        pctr = pctr + 1;%add one to patient-with-data counter
         
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(RD+"PatientStructL3");
+load(RD+"PatientStructL3_Fixed");
 
 %% Parameters
 %################################ Script Control Parameters
@@ -122,4 +122,4 @@ for pIdx = 1:length(patient)
     end
 end
 %% Save the data
-save(WR+"PatientStructL4_Day2JoeChannels","patient","-v7.3");
+save(WR+"PatientStructL4_Day2Only__MedianWithNoisyCh","patient","-v7.3");

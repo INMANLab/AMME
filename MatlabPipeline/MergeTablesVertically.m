@@ -25,6 +25,13 @@ T2 = AddEmptyVarstoTable(T2,varNames,varTypes);
 T1 = T1(:, allVars);
 T2 = T2(:, allVars);
 
+% Step 4: Make sure variable types are consistent
+% varNames = T1.Properties.VariableNames;
+% varTypes = T1.Properties.VariableTypes;
+% for vIdx = 1:length(varNames)
+%     T2 = convertvars(T2, varNames(vIdx), varTypes(vIdx));
+% end
+
 % Step 4: Vertically concatenate
 T = [T1; T2];
 

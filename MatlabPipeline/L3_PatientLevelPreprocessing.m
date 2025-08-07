@@ -76,15 +76,16 @@ for pIdx = 1:length(patient)
         chNamesFixed(nameFixIdx) = "x"+chNamesFixed(nameFixIdx);
         datArray = ConvertTimetable2Array(dat,chNamesFixed);
         %% -------------> Pick required samples
-        tEnd = round(max(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs+10*60*Fs); %with 5 minutes margin
-        tStart = round(min(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs-10*60*Fs); %with 5 minutes margin
+        offsetMargin = 10;% Minutes
+        tEnd = round(max(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs+offsetMargin*60*Fs); %with 5 minutes margin
+        tStart = round(min(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs-offsetMargin*60*Fs); %with 5 minutes margin
         if(tStart<=0)
             tStart = 1;
         end
         if(tEnd>size(datArray,1))
             tEnd=size(datArray,1);
         end
-        datArrayShort = datArray(tStart:tEnd,:);
+        datArray = datArray(tStart:tEnd,:);
         %% -------------> Find Index of Channels for Median
         chIdx = true(1,size(datArray,2));
         if(removeChannelsFlag)
@@ -124,7 +125,9 @@ for pIdx = 1:length(patient)
         % pwelch(datArray(:,10),[],[],[],Fs)
         %% -------------> Epoching
         Fs = patient(pIdx).phase(phIdx).samprate;
-
+        if(tStart >1)
+            tStart = round(min(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs-offsetMargin*60*Fs);
+        end
         for tIdx = 1:size(patient(pIdx).phase(phIdx).trial,1)
             stimIdx = round(patient(pIdx).phase(phIdx).trial.start_time(tIdx)*Fs)-tStart+1;
             if(isnan(stimIdx))
@@ -160,11 +163,11 @@ end
 load(RD+"PatientStructL2");
 patientTemp = patient;
 for pIdx = 1:length(patient)
-    load(WR+"PatientStructL3_Shortened_p"+pIdx);
+    load(WR+"PatientStructL3_SinglePatient_p"+pIdx);
     patientTemp(pIdx) = patient(pIdx);
 end
 clear patient;
 patient = patientTemp;
-save(WR+"PatientStructL3","patient","-v7.3");
+save(WR+"PatientStructL3_Fixed","patient","-v7.3");
 
 

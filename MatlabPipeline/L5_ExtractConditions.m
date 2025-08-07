@@ -12,7 +12,8 @@ WR = "D:\Individuals\Alireza\Data\Amme\MatlabPipeline\CSVOutput\";
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %################################ load patient Structure
-load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
+% load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
+load(RD+"PatientStructL4_Day2Only__MedianWithNoisyCh");
 DisplayPatientStructInfo(patient);
 
 %------------ Name of regions for reference:
@@ -47,11 +48,15 @@ SavePatientsinSeparateFiles = false;
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = [1:24];
-par.Measure = "Coherency";
-par.Region = ["PHG","BLA", "HPC", "PRC"];
+par.PatientList = [10:24];
+par.Measure = "Power";
+par.Region = ["PHG","BLA", "HPC", "PRC",...
+               "PNAS_CA",... % CA region analyzed in the PNAS paper
+               "PNAS_DG",... % DG region analyzed in the PNAS paper
+               "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+               "PNAS_BLA"];
 par.Phase = 3;
-par.ChannelOrder = "1_1"; % For Coherency use "1_1"
+par.ChannelOrder = "1"; % For Coherency use "1_1"
 %% Extract Results
 datAll = table;
 for pIdx = par.PatientList
@@ -88,8 +93,12 @@ for pIdx = par.PatientList
         %-------- Loop over Available Regions
         for aRGIdx = availableRGIdx
             result = resultTemp(resultTemp.Region == availableRegions(aRGIdx), :);
+            resultTemp = resultTemp(resultTemp.Region ~= availableRegions(aRGIdx), :);
 
-            datRes = struct2table(patient(pIdx).phase(phIdx).trial);
+            datRes = patient(pIdx).phase(phIdx).trial;
+            if(isstruct(datRes))
+                datRes = struct2table(datRes);
+            end
     
             measureIdx = result.EpochTime=="PreImage";
             freqIdx = result.Freqs{measureIdx}>=par.Freqs(1)  & result.Freqs{measureIdx}<=par.Freqs(2);
@@ -109,19 +118,23 @@ for pIdx = par.PatientList
             datRes.Phase = repmat(phIdx, size(datRes,1),1);
             datRes.Measure = repmat(par.Measure, size(datRes,1),1);
             datRes.Region = repmat(availableRegions(aRGIdx), size(datRes,1),1);
-            % datRes.Values = values;
+
             datRes(:, "pre_Freq_"+string(round(freqVals,2))) = array2table(values1); %pre
             datRes(:, "post_Freq_"+string(round(freqVals,2))) = array2table(values2); %post
             datRes(:, "diff_Freq_"+string(round(freqVals,2))) = array2table(values); %baseline corrected for stim-nostim graph per region
+
             dat = cat(1,dat,datRes);
         end
-        
+        result = resultTemp;
     end
     
     if(SavePatientsinSeparateFiles)
         % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
         writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
     else
+        if(pIdx>=16)
+            dat.confrt = str2double(dat.confrt);
+        end
         datAll = MergeTablesVertically(datAll,dat);
     end
 end

@@ -9,7 +9,7 @@ for pIdx = 1:length(pList)
     disp("================================================================")
     disp("Patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(pList))
     for phIdx = 1:length(patient(pIdx).phase)
-        if(isempty(patient(pIdx).phase(phIdx).trial))
+        if(isempty(patient(pIdx).phase(phIdx).Results))
             continue;
         end
         disp("-------------Phase:"+phIdx)
