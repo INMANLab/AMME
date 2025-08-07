@@ -1,6 +1,6 @@
 %% Initialization
-clear;
-clc;
+% clear;
+% clc;
 %-----------Raw Data Path
 RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
 %-----------Read Processed Data from:
@@ -55,9 +55,9 @@ regioncolor_C={ 'Orange', 'Cyan','Magenta'};
 testname{1} = 'Immediate Test';
 testname{2} = 'One-Day Test';
 trialType = ["Stim","NoStim","New"];
-removenoe = [2, 3, 5, 7, 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24]; % only 5 PNAS patients
-NP = 5;
-% removenoe = [2,3,5,7,9,10,12,13,14,16,17,19,23];
+keepOnes = [1,4,6,8,11]; % only 5 PNAS patients
+NP = length(keepOnes);
+% keepOnes = [1,4,6,8,11,15,18,20,21,22,24];
 % NP = 10;
 pNameList = [];
 for ph=3%phase 2 and 3 = immediate and one-day tests, respectively
@@ -68,7 +68,7 @@ for ph=3%phase 2 and 3 = immediate and one-day tests, respectively
   %      GO THROUGH EACH PATIENT          %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   for p = 1:length(patient)
-    if(sum(ismember(string(removenoe),string(p)))==0)
+    if(sum(ismember(string(keepOnes),string(p)))==1)
         % continue;
     % end
     fprintf('\tWorking on %s . . .\n', patient(p).name)
@@ -337,19 +337,19 @@ bothDataBLA = mean(bothDataBLA,3);
 freqs  = recogtest(dayIdx).f;
 
 figure
-subplot 311
+subplot 131
 gDat = stimDataP;
 plot(freqs,gDat,'LineWidth',2)
 legend(pNameList)
 title("PERI")
 
-subplot 312
+subplot 132
 gDat = stimDataHPC;
 plot(freqs,gDat,'LineWidth',2)
 legend(pNameList)
 title("HPC")
 
-subplot 313
+subplot 133
 gDat = stimDataBLA;
 plot(freqs,gDat,'LineWidth',2)
 legend(pNameList)
@@ -435,7 +435,7 @@ xlabel("Frequency (Hz)")
 ylabel("Power (dB)")
 legend("PERI","HPC","BLA")
 title("Power")
-xlim([0,50])
+% xlim([0,50])
 
 %% Baseline Adjusted for PERI
 dayIdx = 2; %Day 3
@@ -470,12 +470,12 @@ patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(
 gDat = noStimDataP;
 patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(gDat)/sqrt(NP))]', rgb(ttcolor{2}), 'FaceAlpha',0.25,'EdgeColor','none')
 legend("Stimulation","No Stimumlation")
-xlim([0,50])
+% xlim([0,50])
 title("PERI Power")
 xlabel("Frequency (Hz)")
 ylabel("Adjusted Power (dB)")
 
-%% Baseline Adjusted for PERI
+%% Baseline Adjusted for HPC
 dayIdx = 2; %Day 3
 stimIdx = 1; %With Stim
 noStimIdx = 2; %Without Stim
@@ -497,12 +497,12 @@ patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(
 gDat = noStimDataP;
 patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(gDat)/sqrt(NP))]', rgb(ttcolor{2}), 'FaceAlpha',0.25,'EdgeColor','none')
 legend("Stimulation","No Stimumlation")
-xlim([0,50])
+% xlim([0,50])
 title("HIPP Power")
 xlabel("Frequency (Hz)")
 ylabel("Adjusted Power (dB)")
 
-%% Baseline Adjusted for PERI
+%% Baseline Adjusted for BLA
 dayIdx = 2; %Day 3
 stimIdx = 1; %With Stim
 noStimIdx = 2; %Without Stim
@@ -524,7 +524,7 @@ patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(
 gDat = noStimDataP;
 patch([freqs, flip(freqs)], [mean(gDat)-std(gDat)/sqrt(NP), flip(mean(gDat)+std(gDat)/sqrt(NP))]', rgb(ttcolor{2}), 'FaceAlpha',0.25,'EdgeColor','none')
 legend("Stimulation","No Stimumlation")
-xlim([0,50])
+% xlim([0,50])
 title("BLA Power")
 xlabel("Frequency (Hz)")
 ylabel("Adjusted Power (dB)")
@@ -570,7 +570,7 @@ legend("HIPP-BLA","BLA-PERI","PERI-HIPP")
 title("Coherency")
 xlabel("Frequency (Hz)")
 ylabel("Coherence")
-xlim([0,20])
+% xlim([0,20])
 
 %% Coherency Plots Baseline Adjusted
 dayIdx = 2; %Day 3
@@ -650,7 +650,7 @@ regioncolor={ 'Orange', 'Magenta','Cyan'};
 figure('name', 'MAIN SFN 2016 FIG #3', 'Color', [1 1 1]);
 set(gcf,'DefaultLineLineWidth',1)
 
-alldata = zeros(10,9,3);%subjects by subplot by anatomy 
+alldata = zeros(NP,9,3);%subjects by subplot by anatomy 
 %let's plot absolute mean (across participants) coherece for each region pair averaged across trial types
 for testnum=2
   

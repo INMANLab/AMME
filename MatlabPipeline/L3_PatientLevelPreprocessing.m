@@ -24,8 +24,8 @@ phaseToProcess = 3;%[1,3];
 parPrep.Fs = []; % fill it with each patients data
 
 %-------------------------------- Order of doing the preprocess steps
-parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
-% parPrep.preprocessStepOrder = ["Resample","Bandpass","Bandstop","Rerefrence"];
+% parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
+parPrep.preprocessStepOrder = ["Bandpass","Resample","Rerefrence","Bandstop"];
 
 %-------------------------------- Re-Reference
 parPrep.ReReference.chIdx = []; % channels to include in median
@@ -56,7 +56,7 @@ parEpoch.preStim = 5; % In seconds before stimilus onset
 parEpoch.postStim = 5; % In seconds after stimilus onset
 
 %% Load the EEG, Preprocess and Analyze
-for pIdx = 1:length(patient)
+for pIdx = 6:length(patient)
     disp("Working on patient: "+string(patient(pIdx).name))
     patientPath = RDD+string(patient(pIdx).name);
     for phIdx = phaseToProcess
@@ -150,6 +150,7 @@ for pIdx = 1:length(patient)
             % patient(pIdx).phase(phIdx).trial.region(tIdx) = {region};
             % clear region;
         end
+        a=0;
     end
 
     %% Saving Each patient

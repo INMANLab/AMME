@@ -1,6 +1,6 @@
 %% Initialization
-clear;
-clc;
+% clear;
+% clc;
 %-----------Raw Data Path
 RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
 %-----------Read Processed Data from:
@@ -14,7 +14,7 @@ addpath(genpath(ChronuX_path));
 %################################ load patient Structure
 % load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
 load(RD+"PatientStructL4_Day2Only__MedianWithNoisyCh");
-DisplayPatientStructInfo(patient);
+% DisplayPatientStructInfo(patient);
 
 %------------ Name of regions for reference:
 % "CA";... % "ipsi CA fields"
@@ -48,15 +48,25 @@ SavePatientsinSeparateFiles = false;
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = [10:24];
+par.PatientList = [1:5,7:24];[1,4,8,11];
+
+
+% par.Measure = "Coherency";
+% par.Region = ["PHG","BLA", "HPC", "PRC"];
+% par.ChannelOrder = "1_1";
+
 par.Measure = "Power";
-par.Region = ["PHG","BLA", "HPC", "PRC",...
-               "PNAS_CA",... % CA region analyzed in the PNAS paper
-               "PNAS_DG",... % DG region analyzed in the PNAS paper
-               "PNAS_PRC",... % PRC region analyzed in the PNAS paper
-               "PNAS_BLA"];
+par.Region = ["PHG","BLA", "HPC", "PRC"];
+par.ChannelOrder = "1";
+
+% "PHG","BLA", "HPC", "PRC",...
+% par.Region = ["PHG","BLA", "HPC", "PRC",...,
+              % "PNAS_CA",... % CA region analyzed in the PNAS paper
+              % "PNAS_DG",... % DG region analyzed in the PNAS paper
+              % "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+              % "PNAS_BLA"];
 par.Phase = 3;
-par.ChannelOrder = "1"; % For Coherency use "1_1"
+ % For Coherency use "1_1"
 %% Extract Results
 datAll = table;
 for pIdx = par.PatientList
@@ -71,7 +81,7 @@ for pIdx = par.PatientList
         continue;
     end
     result = result(result.Measure == par.Measure, :);
-    result.ChOrder = string(result.ChOrder);  %----------> Why this happened?
+    % result.ChOrder = string(result.ChOrder);  %----------> Why this happened?
     %-------- Check if Channel is available in this patient
     if(~ismember(par.ChannelOrder, unique(result.ChOrder)))
         continue;
@@ -138,10 +148,72 @@ for pIdx = par.PatientList
         datAll = MergeTablesVertically(datAll,dat);
     end
 end
-if(~SavePatientsinSeparateFiles)
-    writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
-end
+
+% if(~SavePatientsinSeparateFiles)
+%     writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
+% end
 % save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
 
 
 
+%% Sample graphing
+% 
+% pInclude = unique(datAll.Patient);
+% regionNames = ["PNAS_CA","PNAS_BLA","PNAS_PRC"];
+% conds = ["stim"];
+% measureName = "post_Freq_";
+% 
+% % regionNames = ["PNAS_PRC"];
+% % conds = ["nostim","stim"];
+% % measureName = "diff_Freq_";
+% 
+% index = ismember(datAll.Region,regionNames) &...
+%         ismember(datAll.trial_type,conds) &...
+%         ismember(datAll.Patient,pInclude);
+% datGraph = datAll(index,:);
+% unique(datGraph.Patient)
+% 
+% 
+% trial = datGraph.trial_type;
+% newIdx = strcmp(trial,"new");
+% nostimIdx = strcmp(trial,"nostim");
+% trial(~(newIdx|nostimIdx)) = repmat({'stim'},sum(~(newIdx|nostimIdx)),1);
+% datGraph.trial_type = categorical(trial);
+% datGraph.Region = categorical(datGraph.Region);
+% pLevel = groupsummary(datGraph,["Patient","trial_type","Region"],...
+%                              "mean",datGraph.Properties.VariableNames(contains(datGraph.Properties.VariableNames, measureName)));
+% regionLevel = groupsummary(pLevel,["trial_type","Region"],...
+%                                   "mean",pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+% 
+% set(groot, 'defaultLegendInterpreter', 'none');
+% 
+% %--------- patient levels
+% regionNames = string(pLevel.Region);
+% conds = string(pLevel.trial_type)+string(pLevel.Patient);
+% Vals = pLevel(:,pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+% Vals = table2array(Vals);
+% f = convertCharsToStrings(pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+% f = regexp(f,'\d+\.?\d*', 'match');
+% f = vertcat(f{:});
+% f = str2double(f);
+% [f,idx] = sort(f);
+% Vals = Vals(:,idx);
+% 
+% figure
+% subplot 131
+% hold on
+% plot(f,Vals(contains(regionNames,"PRC"),:),'LineWidth',1)
+% % legend("Old","new")
+% title("PERI")
+% 
+% subplot 132
+% hold on
+% plot(f,Vals(contains(regionNames,"CA"),:),'LineWidth',1)
+% % legend("Old","new")
+% title("HPC")
+% 
+% subplot 133
+% hold on
+% plot(f,Vals(contains(regionNames,"BLA"),:),'LineWidth',1)
+% % legend("Old","new")
+% title("BLA")
