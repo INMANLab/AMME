@@ -48,7 +48,7 @@ SavePatientsinSeparateFiles = false;
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = [1:5,7:24];[1,4,8,11];
+par.PatientList = [1,4,6,8,11];[1:5,7:24];
 
 
 % par.Measure = "Coherency";
@@ -56,15 +56,19 @@ par.PatientList = [1:5,7:24];[1,4,8,11];
 % par.ChannelOrder = "1_1";
 
 par.Measure = "Power";
-par.Region = ["PHG","BLA", "HPC", "PRC"];
+% par.Region = ["PHG","BLA", "HPC", "PRC"];
+par.Region = ["PNAS_CA",... % CA region analyzed in the PNAS paper
+              "PNAS_DG",... % DG region analyzed in the PNAS paper
+              "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+              "PNAS_BLA"];
 par.ChannelOrder = "1";
 
 % "PHG","BLA", "HPC", "PRC",...
 % par.Region = ["PHG","BLA", "HPC", "PRC",...,
-              % "PNAS_CA",... % CA region analyzed in the PNAS paper
-              % "PNAS_DG",... % DG region analyzed in the PNAS paper
-              % "PNAS_PRC",... % PRC region analyzed in the PNAS paper
-              % "PNAS_BLA"];
+%               "PNAS_CA",... % CA region analyzed in the PNAS paper
+%               "PNAS_DG",... % DG region analyzed in the PNAS paper
+%               "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+%               "PNAS_BLA"];
 par.Phase = 3;
  % For Coherency use "1_1"
 %% Extract Results
@@ -149,9 +153,9 @@ for pIdx = par.PatientList
     end
 end
 
-% if(~SavePatientsinSeparateFiles)
-%     writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
-% end
+if(~SavePatientsinSeparateFiles)
+    writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
+end
 % save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
 
 

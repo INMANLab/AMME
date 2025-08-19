@@ -7,10 +7,12 @@ set(groot, 'defaultLegendInterpreter', 'none');
 %% Shaded Graphs Single Condition
 regioncolor={ 'Magenta','Orange', 'Cyan'};
 
-regionNames = ["HPC","BLA","PRC"];
+% regionNames = ["HPC","BLA","PRC"];
+regionNames = ["PNAS_BLA","PNAS_CA","PNAS_PRC"];
 % regionNames = ["BLA_HPC","HPC_PRC","BLA_PRC"];
-conds = ["stim"];
+conds = ["nostim"];
 measureName = "post_Freq_";
+yes_no = ["yes"];
 
 
 datAll.trial_type = convertCharsToStrings(datAll.trial_type);
@@ -21,18 +23,16 @@ convertCharsToStrings(unique(datAll.trial_type))
 
 index = ismember(datAll.Region,regionNames) &...
         ismember(datAll.trial_type,conds) &...
-        ismember(datAll.Patient,pInclude);
+        ismember(datAll.Patient,pInclude) &...
+        ismember(datAll.yes_or_no,yes_no);
 
 
 datGraph = datAll(index,:);
 unique(datGraph.Patient)
 
 
-trial = datGraph.trial_type;
-newIdx = strcmp(trial,"new");
-nostimIdx = strcmp(trial,"nostim");
-trial(~(newIdx|nostimIdx)) = repmat({'stim'},sum(~(newIdx|nostimIdx)),1);
-datGraph.trial_type = categorical(trial);
+
+datGraph.trial_type = categorical(datGraph.trial_type);
 datGraph.Region = categorical(datGraph.Region);
 pLevel = groupsummary(datGraph,["Patient","trial_type","Region"],...
                              "mean",datGraph.Properties.VariableNames(contains(datGraph.Properties.VariableNames, measureName)));
@@ -73,7 +73,7 @@ for rgIdx = 1:length(regionNames)
 end
 xlabel("Frequency (Hz)")
 ylabel(unique(datAll.Measure))
-xlim([0,55])
+% xlim([0,55])
 legend(regionNames)
 title(conds)
 
@@ -81,11 +81,12 @@ title(conds)
 %% Shaded Graphs Stim noStim single Region
 condcolor={'Red', 'Blue', 'Green'};
 
-regionNames = ["PRC"]; %"HPC", "BLA","PRC"
+regionNames = ["PNAS_PRC"]; %"HPC", "BLA","PRC"
 % regionNames = ["PNAS_CA_PNAS_BLA","PNAS_PRC_PNAS_BLA","PNAS_CA_PNAS_PRC"];
 % regionNames = ["BLA_PRC"]; %"BLA_HPC","HPC_PRC","BLA_PRC"
 conds = ["nostim","stim"];
 measureName = "diff_Freq_";
+yes_no = ["yes"];
 
 datAll.trial_type = convertCharsToStrings(datAll.trial_type);
 stimConds = ["1s stim", "3s stim", "After stim", "Before stim", "During stim", "stim"];
@@ -95,18 +96,15 @@ convertCharsToStrings(unique(datAll.trial_type))
 
 index = ismember(datAll.Region,regionNames) &...
         ismember(datAll.trial_type,conds) &...
-        ismember(datAll.Patient,pInclude);
+        ismember(datAll.Patient,pInclude)&...
+        ismember(datAll.yes_or_no,yes_no);
 
 
 datGraph = datAll(index,:);
 unique(datGraph.Patient)
 
 
-trial = datGraph.trial_type;
-newIdx = strcmp(trial,"new");
-nostimIdx = strcmp(trial,"nostim");
-trial(~(newIdx|nostimIdx)) = repmat({'stim'},sum(~(newIdx|nostimIdx)),1);
-datGraph.trial_type = categorical(trial);
+datGraph.trial_type = categorical(datGraph.trial_type);
 datGraph.Region = categorical(datGraph.Region);
 pLevel = groupsummary(datGraph,["Patient","trial_type","Region"],...
                              "mean",datGraph.Properties.VariableNames(contains(datGraph.Properties.VariableNames, measureName)));
@@ -148,7 +146,7 @@ for cIdx = 1:length(conds)
 end
 xlabel("Frequency (Hz)")
 ylabel(unique(datAll.Measure))
-xlim([0,55])
+% xlim([0,55])
 legend(conds)
 title(regionNames,'Interpreter','none')
 %% Group levels
