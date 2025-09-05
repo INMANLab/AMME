@@ -109,6 +109,7 @@ for pIdx = 1:length(patient)
 
     end
 end
+
 %% Remove the trial Data
 for pIdx = 1:length(patient)
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(patient))

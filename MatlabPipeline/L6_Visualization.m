@@ -7,8 +7,8 @@ set(groot, 'defaultLegendInterpreter', 'none');
 %% Shaded Graphs Single Condition
 regioncolor={ 'Magenta','Orange', 'Cyan'};
 
-% regionNames = ["HPC","BLA","PRC"];
-regionNames = ["PNAS_BLA","PNAS_CA","PNAS_PRC"];
+regionNames = ["HPC","BLA","PRC"];
+% regionNames = ["PNAS_BLA","PNAS_CA","PNAS_PRC"];
 % regionNames = ["BLA_HPC","HPC_PRC","BLA_PRC"];
 conds = ["nostim"];
 measureName = "post_Freq_";
@@ -168,22 +168,22 @@ title(regionNames,'Interpreter','none')
 % ylabel("Power (dB)")
 % legend(regionNames+" "+conds)
 %% patient levels
-% regionNames = string(pLevel.Region);
-% conds = string(pLevel.trial_type)+string(pLevel.Patient);
-% Vals = pLevel(:,pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
-% Vals = table2array(Vals);
-% f = convertCharsToStrings(pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
-% f = regexp(f,'\d+\.?\d*', 'match');
-% f = vertcat(f{:});
-% f = str2double(f);
-% [f,idx] = sort(f);
-% Vals = Vals(:,idx);
-% 
-% figure
-% plot(f,Vals)
-% xlabel("Frequency (Hz)")
-% ylabel("Power (dB)")
-% legend(regionNames+" "+conds)
+regionNames = string(pLevel.Region);
+conds = string(pLevel.trial_type)+string(pLevel.Patient);
+Vals = pLevel(:,pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+Vals = table2array(Vals);
+f = convertCharsToStrings(pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+f = regexp(f,'\d+\.?\d*', 'match');
+f = vertcat(f{:});
+f = str2double(f);
+[f,idx] = sort(f);
+Vals = Vals(:,idx);
+
+figure
+plot(f,Vals)
+xlabel("Frequency (Hz)")
+ylabel("Power (dB)")
+legend(regionNames+" "+conds)
 %% Collapsed Condition
 % gDat = pLevel;
 % gDat = groupsummary(gDat,["Patient","Region"],...

@@ -1061,7 +1061,6 @@ for pIdx = 1:length(patient)
       patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
 end
 
-
 %% Limit the data to only work on included participants
 includedPatients = readtable("FileInfoList.csv");
 PatientNames = unique(includedPatients.Patient);

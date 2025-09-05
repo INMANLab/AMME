@@ -81,7 +81,7 @@ cd(cPath) %Return to the Current Path
 %% get Channel Name and Index
 pList = string(vertcat(patient.name));
 
-for pIdx = 1:length(pList)
+for pIdx = 2:length(pList)
     if(strcmp(patient(pIdx).exp,'Original'))
         indexOffset = 1;
     else
@@ -115,6 +115,10 @@ for pIdx = 1:length(pList)
         chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).removeChannels.names);
         [~,chIdx] = ismember(chNames,chNamesAll);
         [~,eventChIdx] = ismember(lower(eventChName),lower(chNamesAll));
+
+        % chNames = convertCharsToStrings(patient(pIdx).phase(phaseIdx).emptyChannelNames.names);
+        emChNames = string(patient(pIdx).phase(phaseIdx).emptyChannelNames);
+        [~,emptyChIdx] = ismember(lower(emChNames),lower(chNamesAll));
         
         
         if(eventChIdx ~= 0)
@@ -134,11 +138,13 @@ for pIdx = 1:length(pList)
         patient(pIdx).phase(phaseIdx).removeChannels.chIdx = chIdx;
 
         if(phaseIdx <3) %Stim channels were used
-            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, horzcat(patient(1).stimchan.num));
+            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, horzcat(patient(pIdx).stimchan.num, emptyChIdx));
+            tempIdx = unique(tempIdx);
             patient(pIdx).phase(phaseIdx).extraChannels.chIdx = tempIdx;
             patient(pIdx).phase(phaseIdx).extraChannels.names = chNamesAll(tempIdx)';
         else %Stim channels not used
-            tempIdx = horzcat(eventChIdx,patient(pIdx).phase(phaseIdx).syncChIdx);
+            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, emptyChIdx);
+            tempIdx = unique(tempIdx);
             patient(pIdx).phase(phaseIdx).extraChannels.chIdx = tempIdx;
             patient(pIdx).phase(phaseIdx).extraChannels.names = chNamesAll(tempIdx)';
         end

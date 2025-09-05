@@ -172,3 +172,15 @@ patient = patientTemp;
 save(WR+"PatientStructL3_Fixed","patient","-v7.3");
 
 
+%% 
+% T = table;
+% for pIdx = 1:24
+%     for phaseIdx = [1,3]
+%         tTemp = table;
+%         tTemp.pName = patient(pIdx).name;
+%         tTemp.Phase = phaseIdx;
+%         tTemp.chNames = join(patient(pIdx).phase(phaseIdx).chNamesAll',"', '");
+%         T = cat(1,T,tTemp);
+%     end
+% end
+% writetable(T,"emptyChannels.csv")

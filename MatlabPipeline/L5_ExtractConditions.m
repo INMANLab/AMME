@@ -56,11 +56,11 @@ par.PatientList = [1,4,6,8,11];[1:5,7:24];
 % par.ChannelOrder = "1_1";
 
 par.Measure = "Power";
-% par.Region = ["PHG","BLA", "HPC", "PRC"];
-par.Region = ["PNAS_CA",... % CA region analyzed in the PNAS paper
-              "PNAS_DG",... % DG region analyzed in the PNAS paper
-              "PNAS_PRC",... % PRC region analyzed in the PNAS paper
-              "PNAS_BLA"];
+par.Region = ["PHG","BLA", "HPC", "PRC"];
+% par.Region = ["PNAS_CA",... % CA region analyzed in the PNAS paper
+%               "PNAS_DG",... % DG region analyzed in the PNAS paper
+%               "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+%               "PNAS_BLA"];
 par.ChannelOrder = "1";
 
 % "PHG","BLA", "HPC", "PRC",...

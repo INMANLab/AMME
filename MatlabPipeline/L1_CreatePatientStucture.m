@@ -1054,17 +1054,9 @@ patient(29).maxchan = 276 ; %amyg072
 patient(29).lfp_chan_count = 155 ;
 
 
-%% this section is for the Original patients
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%                 Set up the basic format of the                   %
-%                       "patient" structure                        %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% this section is for giving name to the regions
 
 for pIdx = 1:length(patient)
-    % if (~strcmp(patient(pIdx).exp,"Original"))
-    %     continue
-    % end
 
     patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
     patient(pIdx).ipsi_region(2).name = 'ipsi DG';
@@ -1085,10 +1077,6 @@ for pIdx = 1:length(patient)
     patient(pIdx).contra_region(5).name = 'all contra hippocampus';
     patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
     patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
-    % patient(pIdx).stimchan(1).num = [];
-    % patient(pIdx).stimchan(2).num = [];
-    % patient(pIdx).stimchan(3).num = [];
-    % patient(pIdx).stimchan(4).num = [];
     
     patient(pIdx).phase(1).name = 'study';
     patient(pIdx).phase(2).name = 'immediate test';
@@ -1103,90 +1091,55 @@ for pIdx = 1:length(patient)
     patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
 end
 
-% %% this section is for AMME Timing patients (no immediate test)
-% 
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %                 Set up the basic format of the                   %
-% %                       "patient" structure                        %
-% % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-%  for pIdx = 1:length(patient)
-%    if (~strcmp(patient(pIdx).exp,"Timing"))
-%         continue
-%    end
-%   patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
-%   patient(pIdx).ipsi_region(2).name = 'ipsi DG';
-%   patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
-%   patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
-%   patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
-%   patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
-%   patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-%   patient(pIdx).contra_region(1).name = 'contra CA fields';
-%   patient(pIdx).contra_region(2).name = 'contra DG';
-%   patient(pIdx).contra_region(3).name = 'contra PHG';
-%   patient(pIdx).contra_region(4).name = 'contra BLA';
-%   patient(pIdx).contra_region(5).name = 'all contra hippocampus';
-%   patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
-%   patient(pIdx).contra_region(7).name = 'all contra PRc';%perirhinal cortex channels
-%   patient(pIdx).stimchan(1).num = [];
-%   patient(pIdx).stimchan(2).num = [];
-%   patient(pIdx).stimchan(3).num = [];
-%   patient(pIdx).stimchan(4).num = [];
-% 
-%   patient(pIdx).phase(1).name = 'study';
-%   patient(pIdx).phase(3).name = 'one-day test';
-%   for ph = [1,3] 
-%     patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
-%     patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
-%   end
-%   patient(pIdx).phase(3).syncfn(4) = '2';
-% 
-%   patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM> ???
-%  end
-% 
-% 
-%  %% this section is for AMME Duration patients
-% 
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% %                 Set up the basic format of the                   %
-% %                       "patient" structure                        %
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% for pIdx = 1:length(patient)
-%     if (~strcmp(patient(pIdx).exp,"Duration"))
-%         continue
-%     end
-%       patient(pIdx).ipsi_region(1).name = 'ipsi CA fields';
-%       patient(pIdx).ipsi_region(2).name = 'ipsi DG';
-%       patient(pIdx).ipsi_region(3).name = 'ipsi PHG';
-%       patient(pIdx).ipsi_region(4).name = 'ipsi BLA';
-%       patient(pIdx).ipsi_region(5).name = 'all ipsi hippocampus';
-%       patient(pIdx).ipsi_region(6).name = 'all ipsi EC'; %entorhinal cortex channels
-%       patient(pIdx).ipsi_region(7).name = 'all ipsi PRC';%perirhinal cortex channels
-%       patient(pIdx).contra_region(1).name = 'contra CA fields';
-%       patient(pIdx).contra_region(2).name = 'contra DG';
-%       patient(pIdx).contra_region(3).name = 'contra PHG';
-%       patient(pIdx).contra_region(4).name = 'contra BLA';
-%       patient(pIdx).contra_region(5).name = 'all contra hippocampus';
-%       patient(pIdx).contra_region(6).name = 'all contra EC'; %entorhinal cortex channels
-%       patient(pIdx).contra_region(7).name = 'all contra PRC';%perirhinal cortex channels
-%       patient(pIdx).stimchan(1).num = [];
-%       patient(pIdx).stimchan(2).num = [];
-%       patient(pIdx).stimchan(3).num = [];
-%       patient(pIdx).stimchan(4).num = [];
-% 
-% 
-%       patient(pIdx).phase(1).name = 'study';
-%       patient(pIdx).phase(2).name = 'immediate test';
-%       patient(pIdx).phase(3).name = 'one-day test';
-%       for ph = 1:3
-%         patient(pIdx).phase(ph).samprate = patient(pIdx).samprate;
-%         patient(pIdx).phase(ph).syncfn = patient(pIdx).syncfn;
-%       end
-%       patient(pIdx).phase(3).syncfn(4) = '2';%change the sync filename for one-day test to reflect day2 rather than day1
-% 
-%       patient(pIdx).sync_chnum=str2num(patient(pIdx).syncfn(end-6:end-4)); %#ok<ST2NM>
-% end
+%% Temporary fix for taking care of the empty channels
+pList = string(vertcat(patient(:).name));
+T = table;
+for pIdx = 1:length(pList)
+    for phaseIdx = 1:3
+        patient(pIdx).phase(phaseIdx).emptyChannelNames = {};
+    end
+end
+
+patient(strcmp(pList,"amyg011")).phase(1).emptyChannelNames = {'C127', 'C128'};
+patient(strcmp(pList,"amyg011")).phase(3).emptyChannelNames = {'C127', 'C128'};
+patient(strcmp(pList,"amyg005")).phase(1).emptyChannelNames = {'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'Fp1', 'F7', 'T3', 'T5', 'O1', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg005")).phase(3).emptyChannelNames = {'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'Fp1', 'F7', 'T3', 'T5', 'O1', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg009")).phase(1).emptyChannelNames = {'C71', 'C72', 'C73', 'C74', 'C75', 'C76', 'C77', 'C78', 'C79', 'C80', 'C81', 'C82', 'C83', 'C84', 'C85', 'C86', 'C87', 'C88', 'C89', 'C90', 'C91', 'C92', 'C93', 'C94', 'C95', 'C96', 'C97', 'C98', 'C99', 'C100', 'C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg009")).phase(3).emptyChannelNames = {'C71', 'C72', 'C73', 'C74', 'C75', 'C76', 'C77', 'C78', 'C79', 'C80', 'C81', 'C82', 'C83', 'C84', 'C85', 'C86', 'C87', 'C88', 'C89', 'C90', 'C91', 'C92', 'C93', 'C94', 'C95', 'C96', 'C97', 'C98', 'C99', 'C100', 'C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg010")).phase(1).emptyChannelNames = {'C81', 'C82', 'C83', 'C84', 'C85', 'C86', 'C87', 'C88', 'C89', 'C90', 'C91', 'C92', 'C93', 'C94', 'C95', 'C96', 'C97', 'C98', 'C99', 'C100', 'C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg010")).phase(3).emptyChannelNames = {'C81', 'C82', 'C83', 'C84', 'C85', 'C86', 'C87', 'C88', 'C89', 'C90', 'C91', 'C92', 'C93', 'C94', 'C95', 'C96', 'C97', 'C98', 'C99', 'C100', 'C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg017")).phase(1).emptyChannelNames = {'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg017")).phase(3).emptyChannelNames = {'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg013")).phase(1).emptyChannelNames = {'C101', 'C102', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg013")).phase(3).emptyChannelNames = {'RSRCH1', 'RSRCH2', 'C103', 'C104', 'C105', 'C106', 'C107', 'C108', 'C109', 'C110', 'C111', 'C112', 'C113', 'C114', 'C115', 'C116', 'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg030")).phase(1).emptyChannelNames = {'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg030")).phase(3).emptyChannelNames = {'C117', 'C118', 'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg016")).phase(1).emptyChannelNames = {'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg016")).phase(3).emptyChannelNames = {'C119', 'C120', 'C121', 'C122', 'C123', 'C124', 'C125', 'C126', 'C127', 'C128'};
+patient(strcmp(pList,"amyg037")).phase(1).emptyChannelNames = {'EKG1', 'EKG2', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg037")).phase(3).emptyChannelNames = {'EKG1', 'EKG2', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg048")).phase(1).emptyChannelNames = {'EKG', 'C124', 'C125', 'C126', 'C127', 'C128', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg048")).phase(3).emptyChannelNames = {'EKG', 'C128', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg059")).phase(1).emptyChannelNames = {'EKG', 'RSRCH', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg059")).phase(3).emptyChannelNames = {'EKG', 'RSRCH', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg061")).phase(1).emptyChannelNames = {'Rsch', 'EKG', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg061")).phase(3).emptyChannelNames = {'Rsch', 'EKG', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg045")).phase(1).emptyChannelNames = {'EKG', 'C161', 'C162', 'C163', 'C164', 'C165', 'C166', 'C167', 'C168', 'C169', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg045")).phase(3).emptyChannelNames = {'EKG', 'C161', 'C162', 'C163', 'C164', 'C165', 'C166', 'C167', 'C168', 'C169', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg066")).phase(1).emptyChannelNames = {'EKG', 'C158', 'C159', 'C160', 'C161', 'C162', 'C163', 'C164', 'C165', 'C166', 'C167', 'C168', 'C169', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg066")).phase(3).emptyChannelNames = {'EKG', 'Research', 'C159', 'C160', 'C161', 'C162', 'C163', 'C164', 'C165', 'C166', 'C167', 'C168', 'C169', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg054")).phase(1).emptyChannelNames = {'EKG', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg054")).phase(3).emptyChannelNames = {'EKG', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg057")).phase(1).emptyChannelNames = {'EKG', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg057")).phase(3).emptyChannelNames = {'EKG', 'C170', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg046")).phase(1).emptyChannelNames = {'EKG1', 'EKG2', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg046")).phase(3).emptyChannelNames = {'EKG1', 'EKG2', 'C171', 'C172', 'C173', 'C174', 'C175', 'C176', 'C177', 'C178', 'C179', 'C180', 'C181', 'C182', 'C183', 'C184', 'C185', 'C186', 'C187', 'C188', 'C189', 'C190', 'C191', 'C192', 'C193', 'C194', 'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg034")).phase(1).emptyChannelNames = {'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg034")).phase(3).emptyChannelNames = {'C195', 'C196', 'C197', 'C198', 'C199', 'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg033")).phase(1).emptyChannelNames = {'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg033")).phase(3).emptyChannelNames = {'C200', 'C201', 'C202', 'C203', 'C204', 'C205', 'C206', 'C207', 'C208', 'C209', 'C210', 'C211', 'C212', 'C213', 'C214', 'C215', 'C216', 'C217', 'C218', 'C219', 'C220', 'C221', 'C222', 'C223', 'C224', 'C225', 'C226', 'C227', 'C228', 'C229', 'C230', 'C231', 'C232', 'C233', 'C234', 'C235', 'C236', 'C237', 'C238', 'C239', 'C240', 'C241', 'C242', 'C243', 'C244', 'C245', 'C246', 'C247', 'C248', 'C249', 'C250', 'C251', 'C252', 'C253', 'C254', 'C255', 'C256', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg072")).phase(1).emptyChannelNames = {'EKG', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
+patient(strcmp(pList,"amyg072")).phase(3).emptyChannelNames = {'EKG', 'DC1', 'DC2', 'DC3', 'DC4', 'DC5', 'DC6', 'DC7', 'DC8', 'DC9', 'DC10', 'DC11', 'DC12', 'DC13', 'DC14', 'DC15', 'DC16', 'TRIG', 'OSAT', 'PR', 'Pleth'};
 
 %% Limit the data to only work on included participants
 includedPatients = readtable(RD+"FileInfoList.csv");

@@ -10,55 +10,55 @@ cd(RDD) %go to Raw Data directory
 % %                 to re-reference all the channels                 %
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% 
-% fprintf('Calculating median LFP ...\n')
-% 
-% for p = 1:length(patient)
-%     if (~strcmp(patient(p).exp,"Original"))
-%         continue
-%     end
-%   disp("Working on patient "+ string(patient(p).name))
-%   cd(patient(p).name)%go into patient's directory
-%   for d=2
-%     fprintf('\t\tDay %d...\n',d)
-%     tmplfpfn = sprintf('day%d_lfp_%03d.mat',d,1);%load first lfp just to find out how long it is
-%     load(tmplfpfn)%load the lfp from the .mat file;
-%     lfplen = length(lfp);
-%     clear lfp
-%     tempalllfps = zeros(patient(p).maxchan,lfplen);
-%     fprintf('\t\t...')
-%     for ch = 1:patient(p).maxchan
-%       fprintf(' %d ',ch)
-%       tmplfpfn = sprintf('day%d_lfp_%03d.mat',d,ch);
-%       load(tmplfpfn)%load the lfp from the .mat file; 
-%       if(length(lfp)~=lfplen)
-%         fprintf('\n...error: lfp %d not same length as first lfp...\n',ch)
-%       end
-%       tempalllfps(ch,:) = lfp;
-%       clear lfp
-%     end%channel
-%     fprintf('\n')
-% 
-%     %let's take out the sync channel and, on day 1, the stim channels
-%     tempdelch = str2num(patient(p).syncfn(end-6:end-4)); %#ok<ST2NM>
-%     if(d==1)
-%       for sc = 1:length(patient(p).stimchan)%take out ipsi stim channels on day 1
-%         tempdelch = [tempdelch patient(p).stimchan(sc).num]; %#ok<AGROW>
-%       end
-%     end
-%     tempalllfps(tempdelch, :) = [];%delete the unwanted channels
-%     medlfp = median(tempalllfps);
-%     clear tempalllfps
-%     tmpmedlfpfn = sprintf('day%d_median_lfp.mat',d);%file name
-%     save(tmpmedlfpfn,'medlfp');
-%     clear medlfp
-% 
-%   end%day
-%   cd ..
-% end%patient
-% 
-% 
-% fprintf('\tDone; median LFPs saved as .mat files ...\n')
+
+fprintf('Calculating median LFP ...\n')
+
+for p = 1:length(patient)
+    if (~strcmp(patient(p).exp,"Original"))
+        continue
+    end
+  disp("Working on patient "+ string(patient(p).name))
+  cd(patient(p).name)%go into patient's directory
+  for d=2
+    fprintf('\t\tDay %d...\n',d)
+    tmplfpfn = sprintf('day%d_lfp_%03d.mat',d,1);%load first lfp just to find out how long it is
+    load(tmplfpfn)%load the lfp from the .mat file;
+    lfplen = length(lfp);
+    clear lfp
+    tempalllfps = zeros(patient(p).maxchan,lfplen);
+    fprintf('\t\t...')
+    for ch = 1:patient(p).maxchan
+      fprintf(' %d ',ch)
+      tmplfpfn = sprintf('day%d_lfp_%03d.mat',d,ch);
+      load(tmplfpfn)%load the lfp from the .mat file; 
+      if(length(lfp)~=lfplen)
+        fprintf('\n...error: lfp %d not same length as first lfp...\n',ch)
+      end
+      tempalllfps(ch,:) = lfp;
+      clear lfp
+    end%channel
+    fprintf('\n')
+
+    %let's take out the sync channel and, on day 1, the stim channels
+    tempdelch = str2num(patient(p).syncfn(end-6:end-4)); %#ok<ST2NM>
+    if(d==1)
+      for sc = 1:length(patient(p).stimchan)%take out ipsi stim channels on day 1
+        tempdelch = [tempdelch patient(p).stimchan(sc).num]; %#ok<AGROW>
+      end
+    end
+    tempalllfps(tempdelch, :) = [];%delete the unwanted channels
+    medlfp = median(tempalllfps);
+    clear tempalllfps
+    tmpmedlfpfn = sprintf('day%d_median_lfp.mat',d);%file name
+    save(tmpmedlfpfn,'medlfp');
+    clear medlfp
+
+  end%day
+  cd ..
+end%patient
+
+
+fprintf('\tDone; median LFPs saved as .mat files ...\n')
 
 %%
 
