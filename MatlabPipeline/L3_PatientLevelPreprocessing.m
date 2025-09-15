@@ -56,7 +56,7 @@ parEpoch.preStim = 5; % In seconds before stimilus onset
 parEpoch.postStim = 5; % In seconds after stimilus onset
 
 %% Load the EEG, Preprocess and Analyze
-for pIdx = 6:length(patient)
+for pIdx = 1:length(patient)
     disp("Working on patient: "+string(patient(pIdx).name))
     patientPath = RDD+string(patient(pIdx).name);
     for phIdx = phaseToProcess
@@ -150,7 +150,6 @@ for pIdx = 6:length(patient)
             % patient(pIdx).phase(phIdx).trial.region(tIdx) = {region};
             % clear region;
         end
-        a=0;
     end
 
     %% Saving Each patient
@@ -169,7 +168,7 @@ for pIdx = 1:length(patient)
 end
 clear patient;
 patient = patientTemp;
-save(WR+"PatientStructL3_Fixed","patient","-v7.3");
+save(WR+"PatientStructL3_EmptyRemoved","patient","-v7.3");
 
 
 %% 

@@ -81,7 +81,7 @@ cd(cPath) %Return to the Current Path
 %% get Channel Name and Index
 pList = string(vertcat(patient.name));
 
-for pIdx = 2:length(pList)
+for pIdx = 1:length(pList)
     if(strcmp(patient(pIdx).exp,'Original'))
         indexOffset = 1;
     else
@@ -138,7 +138,7 @@ for pIdx = 2:length(pList)
         patient(pIdx).phase(phaseIdx).removeChannels.chIdx = chIdx;
 
         if(phaseIdx <3) %Stim channels were used
-            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, horzcat(patient(pIdx).stimchan.num, emptyChIdx));
+            tempIdx = horzcat(eventChIdx, patient(pIdx).phase(phaseIdx).syncChIdx, horzcat(patient(pIdx).stimchan.num), emptyChIdx);
             tempIdx = unique(tempIdx);
             patient(pIdx).phase(phaseIdx).extraChannels.chIdx = tempIdx;
             patient(pIdx).phase(phaseIdx).extraChannels.names = chNamesAll(tempIdx)';
