@@ -21,7 +21,7 @@ end
 % xlim([0,120])
 
 
-for step =1:length(parameters.preprocessStepOrder(step))
+for step =1:length(parameters.preprocessStepOrder)
 	processIdentifier = parameters.preprocessStepOrder(step);
 	disp("Step"+ step+":" + processIdentifier)
 	switch processIdentifier

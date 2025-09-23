@@ -75,6 +75,7 @@ for pIdx = 1:length(patient)
         nameFixIdx = startsWith(chNamesFixed,digitsPattern);
         chNamesFixed(nameFixIdx) = "x"+chNamesFixed(nameFixIdx);
         datArray = ConvertTimetable2Array(dat,chNamesFixed);
+        clear dat; %---------------> To save memory
         %% -------------> Pick required samples
         offsetMargin = 10;% Minutes
         tEnd = round(max(patient(pIdx).phase(phIdx).trial.start_time,[],"omitmissing")*Fs+offsetMargin*60*Fs); %with 5 minutes margin
@@ -156,7 +157,7 @@ for pIdx = 1:length(patient)
     % To Improve memory performance save each patient data separately and 
     % free-up memory at the end of the script they are being concatenated.
     save(WR+"PatientStructL3_SinglePatient_p"+pIdx,"patient");
-    clear patient
+    clear patient datArray; %------------- To Save memory
     load(RD+"PatientStructL2");
 end
 %% Load and Combine Separate Patient Data

@@ -102,9 +102,17 @@ for pIdx = 1:length(patient)
             eegDat{rgIdx} = ReturnEEGArray(patient(pIdx).phase(phIdx).trial, rgIdx); 
         end
 
-        % Compute Power and Coherency
-        results = ComputePowerandCoherencyMultiTaper(eegDat(availableRegions), regionNames(availableRegions),...
+        % % -------------------- Compute Power and Coherency
+        % results = ComputePowerandCoherencyMultiTaper(eegDat(availableRegions), regionNames(availableRegions),...
+        %                                                  regionInfo(availableRegions), parTime, multitaperPar);
+
+        % -------------------- Compute Measures: Power, PACs, Standard
+        % Feautures, and HOSA
+        results = ComputeTrialLevelMeasures(eegDat(availableRegions), regionNames(availableRegions),...
                                                          regionInfo(availableRegions), parTime, multitaperPar);
+        % -> Compute the Phase of Theta and Gamma at the stimulation(Brain)
+        % onset
+
         patient(pIdx).phase(phIdx).Results = results;
 
     end
