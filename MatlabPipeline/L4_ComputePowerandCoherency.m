@@ -103,13 +103,14 @@ for pIdx = 1:length(patient)
         end
 
         % % -------------------- Compute Power and Coherency
-        % results = ComputePowerandCoherencyMultiTaper(eegDat(availableRegions), regionNames(availableRegions),...
-        %                                                  regionInfo(availableRegions), parTime, multitaperPar);
-
-        % -------------------- Compute Measures: Power, PACs, Standard
-        % Feautures, and HOSA
-        results = ComputeTrialLevelMeasures(eegDat(availableRegions), regionNames(availableRegions),...
+        results = ComputePowerandCoherencyMultiTaper(eegDat(availableRegions), regionNames(availableRegions),...
                                                          regionInfo(availableRegions), parTime, multitaperPar);
+
+        % -------------------- Compute Measures: Power, PACs, Standard,
+        % FoooF
+        % Feautures, and HOSA
+        % results = ComputeTrialLevelMeasures(eegDat(availableRegions), regionNames(availableRegions),...
+        %                                                  regionInfo(availableRegions), parTime, multitaperPar);
         % -> Compute the Phase of Theta and Gamma at the stimulation(Brain)
         % onset
 
@@ -131,4 +132,4 @@ for pIdx = 1:length(patient)
     end
 end
 %% Save the data
-save(WR+"PatientStructL4_Day2Only__MedianWithNoisyCh","patient","-v7.3");
+save(WR+"PatientStructL4_Day2Only_JoeChannels.mat","patient","-v7.3");

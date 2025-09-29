@@ -11,7 +11,6 @@ PhaseFreq_BandWidth=4;
 AmpFreq_BandWidth=10;
 samprate = 1500;
 
-
 data_length = length(lfp(1,:));
 
 Comodulogram=single(zeros(length(PhaseFreqVector),length(AmpFreqVector)));

@@ -16,7 +16,7 @@ addpath(genpath(ChronuX_path));
 load(RD+"PatientStructL2");
 %################################ Script Control Parameters
 removeChannelsFlag = false; %Whether All specified channels being excluded from Median or not
-phaseToProcess = 3;%[1,3];
+phaseToProcess = 1;%[1,3];
 
 % Important Note
 % All the channel indeces has to be based on the EDF file
