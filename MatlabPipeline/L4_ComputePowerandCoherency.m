@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(RD+"PatientStructL3_Fixed");
+load(RD+"PatientStructL3_EmptyRemoved");
 
 %% Parameters
 %################################ Script Control Parameters

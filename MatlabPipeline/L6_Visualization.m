@@ -1,14 +1,15 @@
 %% Sample graphing
-% pInclude = ["amyg003"];%, "amyg008", "amyg010", "amyg013", "amyg017"];
+% pInclude = ["amyg008", "amyg010", "amyg013", "amyg017"];%,"amyg003" "amyg008", "amyg010", "amyg013", "amyg017"];
 pInclude = unique(datAll.Patient);
 
 set(groot, 'defaultLegendInterpreter', 'none');
-
+% Problems to solve: BLA Amyg057 BLA Amyg030
 %% Shaded Graphs Single Condition
 regioncolor={ 'Magenta','Orange', 'Cyan'};
 
 regionNames = ["HPC","BLA","PRC"];
 % regionNames = ["PNAS_BLA","PNAS_CA","PNAS_PRC"];
+% regionNames = ["PNAS_CA_PNAS_BLA","PNAS_PRC_PNAS_BLA","PNAS_CA_PNAS_PRC"];
 % regionNames = ["BLA_HPC","HPC_PRC","BLA_PRC"];
 conds = ["nostim"];
 measureName = "post_Freq_";
@@ -34,6 +35,11 @@ unique(datGraph.Patient)
 
 datGraph.trial_type = categorical(datGraph.trial_type);
 datGraph.Region = categorical(datGraph.Region);
+% pLevel = groupsummary(datGraph,["Patient","Region"],...
+                             % "mean",datGraph.Properties.VariableNames(contains(datGraph.Properties.VariableNames, measureName)));
+% regionLevel = groupsummary(pLevel,["Region"],...
+                                  % "mean",pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+
 pLevel = groupsummary(datGraph,["Patient","trial_type","Region"],...
                              "mean",datGraph.Properties.VariableNames(contains(datGraph.Properties.VariableNames, measureName)));
 regionLevel = groupsummary(pLevel,["trial_type","Region"],...
@@ -77,12 +83,29 @@ ylabel(unique(datAll.Measure))
 legend(regionNames)
 title(conds)
 
+%% patient levels
+regionNames = string(pLevel.Region);
+conds = string(pLevel.trial_type)+string(pLevel.Patient);
+Vals = pLevel(:,pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+Vals = table2array(Vals);
+f = convertCharsToStrings(pLevel.Properties.VariableNames(contains(pLevel.Properties.VariableNames, measureName)));
+f = regexp(f,'\d+\.?\d*', 'match');
+f = vertcat(f{:});
+f = str2double(f);
+[f,idx] = sort(f);
+Vals = Vals(:,idx);
 
+figure
+plot(f,Vals)
+xlabel("Frequency (Hz)")
+ylabel("Power (dB)")
+legend(regionNames+" "+conds)
 %% Shaded Graphs Stim noStim single Region
 condcolor={'Red', 'Blue', 'Green'};
 
-regionNames = ["PNAS_PRC"]; %"HPC", "BLA","PRC"
-% regionNames = ["PNAS_CA_PNAS_BLA","PNAS_PRC_PNAS_BLA","PNAS_CA_PNAS_PRC"];
+% regionNames = ["PRC"]; %"HPC","BLA",
+regionNames = ["PNAS_PRC"]; %"PNAS_HPC", "PNAS_BLA","PNAS_PRC"
+% regionNames = ["PNAS_CA_PNAS_PRC"]; %"PNAS_CA_PNAS_BLA","PNAS_PRC_PNAS_BLA",
 % regionNames = ["BLA_PRC"]; %"BLA_HPC","HPC_PRC","BLA_PRC"
 conds = ["nostim","stim"];
 measureName = "diff_Freq_";

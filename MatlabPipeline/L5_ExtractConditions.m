@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %################################ load patient Structure
 % load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
-load(RD+"PatientStructL4_Day2Only__MedianWithNoisyCh");
+load(RD+"PatientStructL4_Day2Only_JoeChannels.mat");
 % DisplayPatientStructInfo(patient);
 
 %------------ Name of regions for reference:
@@ -48,7 +48,7 @@ SavePatientsinSeparateFiles = false;
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = [1,4,6,8,11];[1:5,7:24];
+par.PatientList = 1:24;[1,4,6,8,11];[1:5,7:24];1:24;
 
 
 % par.Measure = "Coherency";
