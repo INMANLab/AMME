@@ -23,7 +23,7 @@ removeChannelsFlag = false; %Whether All specified channels being excluded from 
 fileNameTag = "JoeChannels";
 
 phaseToProcess = [1,3];
-patientsToProcess = 1:length(patient);%[1,4,6,8,11]; %
+patientsToProcess = 10:length(patient);%[1,4,6,8,11]; %
 
 
 %################################ preprocessing parameters
@@ -165,7 +165,7 @@ end
 %% Load and Combine Separate Patient Data
 load(RD+"PatientStructL2");
 patientTemp = patient;
-for pIdx = patientsToProcess
+for pIdx = 10:length(patient) %patientsToProcess
     load(WR+"PatientStructL3_SinglePatient_p"+pIdx);
     patientTemp(pIdx) = patient(pIdx);
 end
