@@ -13,12 +13,13 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-load(RD+"PatientStructL3_EmptyRemoved");
+load(RD+"PatientStructL3OnlyPNAS");
 
 %% Parameters
 %################################ Script Control Parameters
 phaseToProcess = 3;%[1,3];
-
+patientsToProcess = [1,4,6,8,11]; %1:length(patient)
+fileNameTag = "OnlyPNAS";
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
 parTime.postStimOffset = 1/10; % 1/10th sec after image onset
@@ -28,7 +29,7 @@ parTime.stimOnset = 5; % In seconds before stimilus onset
 parTime.postStimDuration = .5; % how many seconds of each trial to use after image onset
 parTime.preStimDuration = .5; % how many seconds of each trial to use before image onset as baseline
 
-Fs = 400; % Assuming that all participants has been resampled 
+Fs = 500; % Assuming that all participants has been resampled 
 
 %---------> Compute indeces
 postStimOffset = round(parTime.postStimOffset *Fs); 
@@ -79,7 +80,7 @@ includeRegions = [true;... % "ipsi CA fields"
                   true;... % PRC region analyzed in the PNAS paper
                   true];   % BLA region analyzed in the PNAS paper
 %% Compute Trial Level Power and Coherency 
-for pIdx = 1:length(patient)
+for pIdx = patientsToProcess
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(patient))
     for phIdx = phaseToProcess
         % Extract EEG data
@@ -120,7 +121,7 @@ for pIdx = 1:length(patient)
 end
 
 %% Remove the trial Data
-for pIdx = 1:length(patient)
+for pIdx = patientsToProcess
     disp("Working on patient: "+string(patient(pIdx).name)+" "+pIdx+"/"+length(patient))
     for phIdx = phaseToProcess
         tempDat = patient(pIdx).phase(phIdx).trial;
@@ -132,4 +133,4 @@ for pIdx = 1:length(patient)
     end
 end
 %% Save the data
-save(WR+"PatientStructL4_Day2Only_JoeChannels.mat","patient","-v7.3");
+save(WR+"PatientStructL4"+fileNameTag+".mat","patient","-v7.3");

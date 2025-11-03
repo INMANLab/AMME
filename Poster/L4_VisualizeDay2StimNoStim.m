@@ -7,7 +7,12 @@ RDD = "Z:\Data\AMME_Data_Emory\AMME_Data\";
 RD = "D:\Individuals\Alireza\Data\Amme\Poster\";
 %-----------Write Processed Data to:
 WR = "D:\Individuals\Alireza\Data\Amme\Poster\";
+%---------------- Add Required Toolboxes
+ChronuX_path = "D:\Toolboxes\chronux_2_12";
+addpath(genpath(ChronuX_path));
 %% Load Data
+
+% load(RD+"PatientStructL3_EmptyRemoved.mat")
 load(RD+"PatientStructwithEEG_OriginalChannels.mat")
 
 %% Relabel Trials to Stim and no Stim
@@ -416,7 +421,6 @@ legend("PRI","HPC","BLA")
 title("No Stimulation")
 
 subplot 133
-figure
 gDat = bothDataP;
 plot(freqs,mean(gDat),'LineWidth',2,Color=rgb(regioncolor{1}))
 hold on

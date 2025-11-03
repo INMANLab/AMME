@@ -13,7 +13,8 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 %################################ load patient Structure
 % load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
-load(RD+"PatientStructL4_Day2Only_JoeChannels.mat");
+% load(RD+"PatientStructL4_Day2Only_JoeChannels.mat");
+load(RD+"PatientStructL4OnlyPNAS.mat");
 % DisplayPatientStructInfo(patient);
 
 %------------ Name of regions for reference:
@@ -48,20 +49,23 @@ SavePatientsinSeparateFiles = false;
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = 1:24;[1,4,6,8,11];[1:5,7:24];1:24;
+par.PatientList = [1,4,6,8,11];%[1:5,7:24];1:24;
 
 
-% par.Measure = "Coherency";
+par.Measure = "Coherency";
+par.Region = ["PNAS_CA",... % CA region analyzed in the PNAS paper
+              "PNAS_DG",... % DG region analyzed in the PNAS paper
+              "PNAS_PRC",... % PRC region analyzed in the PNAS paper
+              "PNAS_BLA"];
+par.ChannelOrder = "1_1";
+
+% par.Measure = "Power";
 % par.Region = ["PHG","BLA", "HPC", "PRC"];
-% par.ChannelOrder = "1_1";
-
-par.Measure = "Power";
-par.Region = ["PHG","BLA", "HPC", "PRC"];
 % par.Region = ["PNAS_CA",... % CA region analyzed in the PNAS paper
 %               "PNAS_DG",... % DG region analyzed in the PNAS paper
 %               "PNAS_PRC",... % PRC region analyzed in the PNAS paper
 %               "PNAS_BLA"];
-par.ChannelOrder = "1";
+% par.ChannelOrder = "1";
 
 % "PHG","BLA", "HPC", "PRC",...
 % par.Region = ["PHG","BLA", "HPC", "PRC",...,
@@ -144,7 +148,7 @@ for pIdx = par.PatientList
     
     if(SavePatientsinSeparateFiles)
         % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
-        writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
+        % writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
     else
         if(pIdx>=16)
             dat.confrt = str2double(dat.confrt);
@@ -154,7 +158,7 @@ for pIdx = par.PatientList
 end
 
 if(~SavePatientsinSeparateFiles)
-    writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
+    % writetable(datAll,WR+FileNameStartWith+"phase"+phIdx+"Measure"+par.Measure+".csv")
 end
 % save(WR+FileNameStartWith+"FreqValsfor"+"_phase"+phIdx+"_Measure","freqVals");
 

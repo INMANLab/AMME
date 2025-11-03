@@ -1,11 +1,11 @@
-function dat = PreprocesRoutine(dat, parameters, step)%, chIdx)
+function dat = PreprocesRoutine(dat, parameters)%, step)%, chIdx)
 % parameters.stepOrder should include steps in the desired order:
 % Example: ["Resample","Rerefrence","Bandpass","Bandstop"]
 
-if(~exist("step","var"))
-    step = 1;
-    disp("----------Preprocessing Pipeline:")
-end
+% if(~exist("step","var"))
+%     step = 1;
+%     disp("----------Preprocessing Pipeline:")
+% end
 % if(~exist("channels","var"))
 %     chIdx = 1:size(dat,2);
 % end
@@ -29,7 +29,7 @@ for step =1:length(parameters.preprocessStepOrder)
             Fs = parameters.Fs; %---- get the current Fs
 			FsRes = parameters.Resample.FsRes;
 			Method = parameters.Resample.Method;
-			t = (0:(size(dat, 1) - 1))/Fs;
+			t = (1:(size(dat, 1)))/Fs;
 			dat = resample(dat, t, FsRes, Method);
 			
 			parameters.Fs = FsRes;  % Update Fs with the resampling frequency

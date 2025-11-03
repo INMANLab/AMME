@@ -19,8 +19,8 @@ addpath(genpath(ChronuX_path));
 %-------- load patient Structure
 load(RD+"PatientStructL2");
 %################################ Script Control Parameters
-removeChannelsFlag = true; %Whether All specified channels being excluded from Median or not
-fileNameTag = "MartinaChannels";
+removeChannelsFlag = false; %Whether All specified channels being excluded from Median or not
+fileNameTag = "JoeChannels";
 
 phaseToProcess = [1,3];
 patientsToProcess = 1:length(patient);%[1,4,6,8,11]; %
