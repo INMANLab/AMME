@@ -171,7 +171,7 @@ for pIdx = patientsToProcess
 end
 clear patient;
 patient = patientTemp;
-save(WR+"PatientStructL3"+fileNameTag,"patient","-v7.3");
+save(WR+"PatientStructL3_"+fileNameTag,"patient","-v7.3");
 
 
 %% 
