@@ -165,7 +165,7 @@ end
 %% Load and Combine Separate Patient Data
 load(RD+"PatientStructL2");
 patientTemp = patient;
-for pIdx = 10:length(patient) %patientsToProcess
+for pIdx = patientsToProcess
     load(WR+"PatientStructL3_SinglePatient_p"+pIdx);
     patientTemp(pIdx) = patient(pIdx);
 end

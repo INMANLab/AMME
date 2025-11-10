@@ -13,7 +13,7 @@ ChronuX_path = "D:\Toolboxes\chronux_2_12";
 addpath(genpath(ChronuX_path));
 
 %################################ load patient Structure
-fileNameTag = "MartinaChannels";
+fileNameTag = "JoeChannels";
 load(RD+"PatientStructL3_"+fileNameTag);
 %% Parameters
 %################################ Script Control Parameters

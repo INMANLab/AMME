@@ -1,6 +1,6 @@
 %% Sample graphing
-pInclude = ["amyg008", "amyg010", "amyg013", "amyg017"];%,"amyg003" "amyg008", "amyg010", "amyg013", "amyg017"];
-pInclude = unique(datAll.Patient);
+pInclude = ["amyg003","amyg008", "amyg010", "amyg013", "amyg017"];%,"amyg003" "amyg008", "amyg010", "amyg013", "amyg017"];
+% pInclude = unique(datAll.Patient);
 
 set(groot, 'defaultLegendInterpreter', 'none');
 % Problems to solve: BLA Amyg057 BLA Amyg030
@@ -11,7 +11,7 @@ regioncolor={ 'Magenta','Orange', 'Cyan'};
 % regionNames = ["PNAS_PRC","PNAS_CA","PNAS_BLA"];
 regionNames = ["PNAS_CA_PNAS_BLA","PNAS_PRC_PNAS_BLA","PNAS_CA_PNAS_PRC"];
 % regionNames = ["BLA_HPC","HPC_PRC","BLA_PRC"];
-conds = ["nostim"];
+conds = ["stim"];
 measureName = "post_Freq_";
 yes_no = ["yes"];
 
