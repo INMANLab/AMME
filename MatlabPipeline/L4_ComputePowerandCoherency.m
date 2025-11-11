@@ -22,27 +22,27 @@ patientsToProcess = 1:length(patient);
 
 %################################ Timing Parameters
 % offset to exclude the image onset. It can be zero
-parTime.postStimOffset = 1/10; % 1/10th sec after image onset
-parTime.preStimOffset = 1/10; % 1/10th sec before image onset
+parTime.postImageOffset = 1/10; % 1/10th sec after image onset
+parTime.preImageOffset = 1/10; % 1/10th sec before image onset
 
-parTime.stimOnset = 5; % In seconds before stimilus onset
-parTime.postStimDuration = .5; % how many seconds of each trial to use after image onset
-parTime.preStimDuration = .5; % how many seconds of each trial to use before image onset as baseline
+parTime.imageOnset = 5; % In seconds before stimilus onset
+parTime.postImageDuration = .5; % how many seconds of each trial to use after image onset
+parTime.preImageDuration = .5; % how many seconds of each trial to use before image onset as baseline
 
 Fs = 500; % Assuming that all participants has been resampled 
 
 %---------> Compute indeces
-postStimOffset = round(parTime.postStimOffset *Fs); 
-preStimOffset = round(parTime.preStimOffset * Fs);
-stimOnset = round(parTime.stimOnset * Fs);
-postStimDuration = round(parTime.postStimDuration * Fs);
-preStimDuration = round(parTime.preStimDuration * Fs);
+postImageOffset = round(parTime.postImageOffset *Fs); 
+preImageOffset = round(parTime.preImageOffset * Fs);
+imageOnset = round(parTime.imageOnset * Fs);
+postImageDuration = round(parTime.postImageDuration * Fs);
+preImageDuration = round(parTime.preImageDuration * Fs);
  
-parTime.startIdxPost = stimOnset+postStimOffset;
-parTime.endIdxPost = stimOnset+postStimOffset+postStimDuration;
+parTime.startIdxPost = imageOnset+postImageOffset;
+parTime.endIdxPost = imageOnset+postImageOffset+postImageDuration;
 
-parTime.startIdxPre = stimOnset-preStimOffset-preStimDuration;
-parTime.endIdxPre = stimOnset-preStimOffset;
+parTime.startIdxPre = imageOnset-preImageOffset-preImageDuration;
+parTime.endIdxPre = imageOnset-preImageOffset;
 %################################ Power and Coherency parameters
 multitaperPar.Fs = Fs; % Assuming that all participants has been resampled 
 multitaperPar.tapers = [3, 5;...
