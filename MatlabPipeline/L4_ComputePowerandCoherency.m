@@ -24,25 +24,36 @@ patientsToProcess = 1:length(patient);
 % offset to exclude the image onset. It can be zero
 parTime.postImageOffset = 1/10; % 1/10th sec after image onset
 parTime.preImageOffset = 1/10; % 1/10th sec before image onset
+parTime.postStimOffset = 1/10; % 1/10th sec after Stimulation ends
 
-parTime.imageOnset = 5; % In seconds before stimilus onset
+parTime.imageOnset = 5; % In seconds before Image onset
 parTime.postImageDuration = .5; % how many seconds of each trial to use after image onset
 parTime.preImageDuration = .5; % how many seconds of each trial to use before image onset as baseline
+
+parTime.stimulationEnd = parTime.imageOnset + 3 + 1 ; % In seconds after Stimulation Ends
+parTime.postStimDuration = .5; % how many seconds of each trial to use after Stimulation Ends
 
 Fs = 500; % Assuming that all participants has been resampled 
 
 %---------> Compute indeces
 postImageOffset = round(parTime.postImageOffset *Fs); 
 preImageOffset = round(parTime.preImageOffset * Fs);
+postStimOffset = round(parTime.postStimOffset * Fs);
+
 imageOnset = round(parTime.imageOnset * Fs);
+stimulationEnd = round(parTime.stimulationEnd * Fs);
 postImageDuration = round(parTime.postImageDuration * Fs);
 preImageDuration = round(parTime.preImageDuration * Fs);
+postStimDuration = round(parTime.postStimDuration * Fs);
  
 parTime.startIdxPost = imageOnset+postImageOffset;
 parTime.endIdxPost = imageOnset+postImageOffset+postImageDuration;
 
 parTime.startIdxPre = imageOnset-preImageOffset-preImageDuration;
 parTime.endIdxPre = imageOnset-preImageOffset;
+
+parTime.startIdxPostStim = stimulationEnd+postStimOffset;
+parTime.endIdxPostStim = stimulationEnd+postStimOffset+postStimDuration;
 %################################ Power and Coherency parameters
 multitaperPar.Fs = Fs; % Assuming that all participants has been resampled 
 multitaperPar.tapers = [3, 5;...
