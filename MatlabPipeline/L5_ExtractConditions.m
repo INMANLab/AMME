@@ -15,7 +15,7 @@ addpath(genpath(ChronuX_path));
 % load(RD+"PatientStructL4_MartinaChannels_MedianWithoutNoisyCh");
 % load(RD+"PatientStructL4_Day2Only_JoeChannels.mat");
 % load(RD+"PatientStructL4OnlyPNAS.mat");
-fileNameTag = "MartinaChannels";
+fileNameTag = "JoeChannels";
 load(RD+"PatientStructL4_"+fileNameTag+".mat");
 % DisplayPatientStructInfo(patient);
 
@@ -34,15 +34,15 @@ load(RD+"PatientStructL4_"+fileNameTag+".mat");
 %-------- Control output CSV files
 
 FileNameStartWith = "Data_"+fileNameTag;
-SavePatientsinSeparateFiles = true; % false -> Store in one csv | true -> Store separate csv for each patient
+SavePatientsinSeparateFiles = false; % false -> Store in one csv | true -> Store separate csv for each patient
 
 %-------- Desired Results
 par.Freqs = [0,100];
 par.PatientList = 1:24;
-par.Measure = "Coherency";
+par.Measure = "Power";
 par.Region = ["HPC","PHG","BLA","PRC","EC","CA","DG"];
 par.Phase = 1;
-par.ChannelOrder = "1_1"; % For Power use "1"
+par.ChannelOrder = "1"; % For Power use "1"
 
 %################################ Example Parameters for Coherency
 %-------- Control output CSV files
@@ -159,15 +159,15 @@ for phIdx = par.Phase
             end % end Region
         end %end Channel Order
         
-        if(SavePatientsinSeparateFiles)
-            % writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
-            writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
-        else
-            if(pIdx>=16)
-                dat.confrt = str2double(dat.confrt);
-            end
-            datAll = MergeTablesVertically(datAll,dat);
-        end
+      %  if(SavePatientsinSeparateFiles)
+         %    writetable(datRes,WR+"patient"+pIdx+"phase"+phIdx+"Measure"+par.Measure+".csv")
+      %      writetable(dat,WR+FileNameStartWith+string(patient(pIdx).name)+"phase"+phIdx+"Measure"+par.Measure+".csv") %#ok<UNRCH>
+      %  else
+      %      if(pIdx>=16)
+       %         dat.confrt = str2double(dat.confrt);
+       %     end
+           datAll = MergeTablesVertically(datAll,dat);
+      %  end
     end
     if(~SavePatientsinSeparateFiles)
         writetable(datAll,WR+FileNameStartWith+"_AllPatients"+"_phase"+phIdx+"_Measure"+par.Measure+".csv")
