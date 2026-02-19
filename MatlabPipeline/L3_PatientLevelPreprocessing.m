@@ -39,8 +39,8 @@ parPrep.ReReference.chIdx = []; % channels to include in median
 %-------------------------------- Bandpass
 parPrep.Bandpass.FcLow = 1;
 parPrep.Bandpass.FcHigh = 200;
-parPrep.Bandpass.rippleStop = 0.05;
-parPrep.Bandpass.ripplePass = 0.05;
+parPrep.Bandpass.rippleStop = 0.1;
+parPrep.Bandpass.ripplePass = 0.1;
 
 %-------------------------------- Resample
 parPrep.Resample.FsRes = 500;
