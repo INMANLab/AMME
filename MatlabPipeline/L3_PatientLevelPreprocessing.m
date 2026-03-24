@@ -31,7 +31,7 @@ parPrep.Fs = []; % fill it with each patients data
 
 %-------------------------------- Order of doing the preprocess steps
 % parPrep.preprocessStepOrder = ["Bandpass","Bandstop","Rerefrence","Resample"];
-parPrep.preprocessStepOrder = ["Bandpass","Rerefrence","Bandstop","Resample"];
+parPrep.preprocessStepOrder = ["Resample","Bandpass","Rerefrence"];
 
 %-------------------------------- Re-Reference
 parPrep.ReReference.chIdx = []; % channels to include in median
@@ -39,8 +39,8 @@ parPrep.ReReference.chIdx = []; % channels to include in median
 %-------------------------------- Bandpass
 parPrep.Bandpass.FcLow = 1;
 parPrep.Bandpass.FcHigh = 200;
-parPrep.Bandpass.rippleStop = 0.1;
-parPrep.Bandpass.ripplePass = 0.1;
+parPrep.Bandpass.rippleStop = 0.01;
+parPrep.Bandpass.ripplePass = 0.01;
 
 %-------------------------------- Resample
 parPrep.Resample.FsRes = 500;
@@ -106,7 +106,7 @@ for pIdx = patientsToProcess
         patient(pIdx).phase(phIdx).chNamesKept = chIdx;
         %% -------------> Preprocessing
         parPrep.Fs = Fs;
-        parPrep.preprocessStepOrder = ["Bandpass","Rerefrence","Resample"];
+        parPrep.preprocessStepOrder = ["Resample","Bandpass","Rerefrence"];
         datArray = PreprocesRoutine(datArray, parPrep);
         patient(pIdx).phase(phIdx).samprate = parPrep.Resample.FsRes;
 
