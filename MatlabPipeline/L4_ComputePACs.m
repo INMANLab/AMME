@@ -4,9 +4,9 @@ clc;
 %-----------Raw Data Path
 RDD = "C:\Users\Alireza\Box\InmanLab\";
 %-----------Read Processed Data from:
-RD = "D:\Individuals\Alireza\Data\BLAES\MatlabPipeline\";
+RD = "D:\Individuals\Alireza\Data\AMME\MatlabPipeline\";
 %-----------Write Processed Data to:
-WR = "D:\Individuals\Alireza\Data\BLAES\MatlabPipeline\";
+WR = "D:\Individuals\Alireza\Data\AMME\MatlabPipeline\";
 
 %################################ Add Required Toolboxes
 % eeglab_path = "D:\Toolboxes\eeglab";
@@ -15,7 +15,7 @@ WR = "D:\Individuals\Alireza\Data\BLAES\MatlabPipeline\";
 %################################ load patient Structure
 
 % load(RD+"PatientStructL3");
-load(RD+"PatientStructL3");
+load(RD+"PatientStructL3_MartinaChannels");
 %% Parameters
 %################################ Script Control Parameters
 phaseToProcess = [1,3];

@@ -4,9 +4,9 @@ clc;
 %-----------Raw Data Path
 RDD = "C:\Users\Alireza\Box\InmanLab\";
 %-----------Read Processed Data from:
-RD = "D:\Individuals\Alireza\Data\BLAES\MatlabPipeline\";
+RD = "D:\Individuals\Alireza\Data\AMME\MatlabPipeline\";
 %-----------Write Processed Data to:
-WR = "D:\Individuals\Alireza\Data\BLAES\MatlabPipeline\";
+WR = "D:\Individuals\Alireza\Data\AMME\MatlabPipeline\";
 
 %################################ Add Required Toolboxes
 ChronuX_path = "D:\Toolboxes\chronux_2_12";
@@ -42,13 +42,23 @@ load(RD+"PatientStructL4_PAC"+".mat");
 %-------- Control output CSV files
 
 FileNameStartWith = "Data_";
-SavePatientsinSeparateFiles = false; % false -> Store in one csv | true -> Store separate csv for each patient
+SavePatientsinSeparateFiles = true; % false -> Store in one csv | true -> Store separate csv for each patient
 
 %-------- Desired Results
 par.Freqs = [0,100];
-par.PatientList = 1:23;
+par.PatientList = 1:length(patient);
 par.Measure = "PAC_TG";
-par.Region = ["CA","BLA","HPC", "EC", "PRC","DG","ER"];
+par.Region = ["CA";...  % "ipsi CA fields"
+               "DG";...  % "ipsi DG"
+               "PHG";... % "ipsi PHG"
+               "BLA";... % "ipsi BLA"
+               "HPC";... % "all ipsi hippocampus"
+               "EC";...  % "all ipsi EC"
+               "PRC";... % "all ipsi PRC"
+               "PNAS_CA";... % CA region analyzed in the PNAS paper
+               "PNAS_DG";... % DG region analyzed in the PNAS paper
+               "PNAS_PRC";... % PRC region analyzed in the PNAS paper
+               "PNAS_BLA"];
 par.Phase = 1;
 par.ChannelOrder = "1_1"; 
 
@@ -100,7 +110,9 @@ for phIdx = par.Phase
                     if(isstruct(datRes))
                         datRes = struct2table(datRes);
                     end
-            
+                    emptyTrials = isnan(datRes.start_time);
+                    datRes = datRes(~emptyTrials,:);
+
                     measureIdx = result.EpochTime=="PreImage";
                     freqIdx = result.Freqs{measureIdx}>=par.Freqs(1)  & result.Freqs{measureIdx}<=par.Freqs(2);
                     freqVals = result.Freqs{measureIdx}(freqIdx);
@@ -112,7 +124,7 @@ for phIdx = par.Phase
                     values = result.Value{measureIdx};
                     values2 = values(:,freqIdx);
                 
-                    % values = values2-values1;% Values Already converted to db for power and fisher-z transformed for coherency
+                    values = values2-values1;
                 
                     datRes.Patient = repmat(string(patient(pIdx).name), size(datRes,1),1);
                     datRes.Experiment = repmat(string(patient(pIdx).exp), size(datRes,1),1);
@@ -124,7 +136,7 @@ for phIdx = par.Phase
         
                     datRes(:, "pre_Freq_"+string(round(freqVals,2))) = array2table(values1); %pre
                     datRes(:, "post_Freq_"+string(round(freqVals,2))) = array2table(values2); %post
-                    % datRes(:, "diff_Freq_"+string(round(freqVals,2))) = array2table(values); %baseline corrected for stim-nostim graph per region
+                    datRes(:, "diff_Freq_"+string(round(freqVals,2))) = array2table(values); %baseline corrected for stim-nostim graph per region
                     dat = cat(1,dat,datRes);
                 end
                 result = resultTemp;
