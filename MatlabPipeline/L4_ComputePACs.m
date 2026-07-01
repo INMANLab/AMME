@@ -18,7 +18,7 @@ WR = "D:\Individuals\Alireza\Data\AMME\MatlabPipeline\";
 load(RD+"PatientStructL3_MartinaChannels");
 %% Parameters
 %################################ Script Control Parameters
-phaseToProcess = [1,3];
+phaseToProcess = [1];
 patientsToProcess = 1:length(patient);
 
 %################################ Timing Parameters
@@ -123,4 +123,4 @@ for pIdx = patientsToProcess
     end
 end
 %% Save the data
-save(WR+"PatientStructL4_PAC"+".mat","patient","-v7.3");
+save(WR+"PatientStructL4_PAC_StimEnc"+".mat","patient","-v7.3");

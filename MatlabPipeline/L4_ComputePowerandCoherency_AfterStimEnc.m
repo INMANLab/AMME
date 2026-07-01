@@ -42,13 +42,13 @@ preImageOffset = round(parTime.preImageOffset * Fs);
 postStimOffset = round(parTime.postStimOffset * Fs);
 
 imageOnset = round(parTime.imageOnset * Fs);
-stimulationEnd = round(parTime.stimulationEnd * Fs);
 postImageDuration = round(parTime.postImageDuration * Fs);
 preImageDuration = round(parTime.preImageDuration * Fs);
+stimulationEnd = round(parTime.stimulationEnd * Fs);
 postStimDuration = round(parTime.postStimDuration * Fs);
  
-parTime.startIdxPost = imageOnset+postImageOffset;
-parTime.endIdxPost = imageOnset+postImageOffset+postImageDuration;
+parTime.startIdxPost = stimulationEnd+postStimOffset;
+parTime.endIdxPost = stimulationEnd+postStimOffset+postStimDuration;
 
 parTime.startIdxPre = imageOnset-preImageOffset-preImageDuration;
 parTime.endIdxPre = imageOnset-preImageOffset;
