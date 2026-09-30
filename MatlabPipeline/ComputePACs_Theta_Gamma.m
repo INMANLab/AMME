@@ -122,10 +122,10 @@ for i1 = 1:nValid
         chOrderLabel = chIdx1 + "_" + chIdx2;
 
         row = row + 1;
-        rowData(row,:) = {"PreImage", "PAC_TG", regionLabel, chNameLabel, chOrderLabel, {xbins}, {pacValsPre}};
+        rowData(row,:) = {"Pre", "PAC_TG", regionLabel, chNameLabel, chOrderLabel, {xbins}, {pacValsPre}};
 
         row = row + 1;
-        rowData(row,:) = {"PostImage", "PAC_TG", regionLabel, chNameLabel, chOrderLabel, {xbins}, {pacValsPost}};
+        rowData(row,:) = {"Post", "PAC_TG", regionLabel, chNameLabel, chOrderLabel, {xbins}, {pacValsPost}};
     end
 end
 

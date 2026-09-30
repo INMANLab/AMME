@@ -15,7 +15,7 @@ addpath(genpath(ChronuX_path));
 %################################ load patient Structure
 fileNameTag = "MartinaChannels";
 load(RD+"PatientStructL3_"+fileNameTag);
-fileNameTag = "MartinaChannels_AfterStimEnc";
+fileNameTag = "AfterStimEnc";
 %% Parameters
 %################################ Script Control Parameters
 phaseToProcess = [1]; %-------------------> Only Encoding

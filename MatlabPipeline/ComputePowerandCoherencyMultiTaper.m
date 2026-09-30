@@ -15,7 +15,7 @@ for rg1 = 1:length(eegDat)
         pVal1Post = db(pVal1Post,'power'); %Decibel
 
         temptab = table;
-        temptab.EpochTime = "PreImage";
+        temptab.EpochTime = "Pre";
         temptab.Measure = "Power";
         temptab.Region = regionNames(rg1);
         temptab.ChName = regionInfo(rg1).lfpName(chIdx1);
@@ -25,7 +25,7 @@ for rg1 = 1:length(eegDat)
         results = vertcat(results,temptab);
 
         temptab = table;
-        temptab.EpochTime = "PostImage";
+        temptab.EpochTime = "Post";
         temptab.Measure = "Power";
         temptab.Region = regionNames(rg1);
         temptab.ChName = regionInfo(rg1).lfpName(chIdx1);
@@ -54,7 +54,7 @@ for rg1 = 1:(length(eegDat)-1)
 
 
                 temptab = table;
-                temptab.EpochTime = "PreImage";
+                temptab.EpochTime = "Pre";
                 temptab.Measure = "Coherency";
                 temptab.Region = regionNames(rg1)+"_"+regionNames(rg2);
                 temptab.ChName = regionInfo(rg1).lfpName(chIdx1)+"_"+regionInfo(rg2).lfpName(chIdx2);
@@ -64,7 +64,7 @@ for rg1 = 1:(length(eegDat)-1)
                 results = vertcat(results,temptab);
 
                 temptab = table;
-                temptab.EpochTime = "PostImage";
+                temptab.EpochTime = "Post";
                 temptab.Measure = "Coherency";
                 temptab.Region = regionNames(rg1)+"_"+regionNames(rg2);
                 temptab.ChName = regionInfo(rg1).lfpName(chIdx1)+"_"+regionInfo(rg2).lfpName(chIdx2);
